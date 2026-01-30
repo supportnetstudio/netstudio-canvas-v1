@@ -294,36 +294,27 @@
       `).join("");
     }
 
-    function renderServices(menuJson) {
+    function renderServices(items) {
       const grid = document.getElementById("service_preview");
       if(!grid) return;
       
-      // Try to parse if string, else assume object
-      let items = [];
-      try {
-        const data = typeof menuJson === 'string' ? JSON.parse(menuJson) : menuJson;
-        // Flatten categories if needed, or just grab top level items
-        // For simplicity, let's assume simple list or extract first 3 items found
-        if(Array.isArray(data)) items = data;
-      } catch(e) {}
-
       // Fallback if no real data
-      if(items.length === 0) {
+      if(!items || items.length === 0) {
         items = [
-          { name: "Signature Cut", price: "$60+", desc: "Customized shape for your texture." },
-          { name: "Full Color", price: "$120+", desc: "All-over color or root retouch." },
-          { name: "Consultation", price: "Free", desc: "Let's talk about your hair goals." }
+          { name: "Signature Cut", price: "$60+", description: "Customized shape for your texture." },
+          { name: "Full Color", price: "$120+", description: "All-over color or root retouch." },
+          { name: "Consultation", price: "Free", description: "Let's talk about your hair goals." }
         ];
       }
 
-      // Take 3
+      // Take Top 3
       const subset = items.slice(0, 3);
       
       grid.innerHTML = subset.map(s => `
         <div class="price-card">
           <h3 class="card-title">${s.name || "Service"}</h3>
           <span class="card-price">${s.price || "See Menu"}</span>
-          <p class="card-desc">${s.desc || s.description || ""}</p>
+          <p class="card-desc">${s.description || ""}</p>
           <button class="btn" style="width:100%; font-size: 14px;" onclick="window.nsOpenBooking(); return false;">Book</button>
         </div>
       `).join("");
@@ -340,7 +331,7 @@
 
       // 1. Business Info
       const { data: biz } = await sb.from("business")
-        .select("id, name, menu_json")
+        .select("id, name")
         .eq("slug", SLUG).maybeSingle();
       
       if (!biz) return;
@@ -358,10 +349,16 @@
         if(footL) footL.textContent = n;
       }
 
-      // Render Services
-      renderServices(biz.menu_json);
+      // 2. Fetch Top 3 Services from menu_items (real table)
+      const { data: menuItems } = await sb.from("menu_items")
+        .select("name, price, description")
+        .eq("business_id", biz.id)
+        .eq("is_active", true)
+        .limit(3);
 
-      // 2. Fetch Team (Active only)
+      renderServices(menuItems || []);
+
+      // 3. Fetch Team (Active only)
       const { data: members } = await sb.from("team_members")
         .select("id, name, profile_image_url")
         .eq("business_id", biz.id)
