@@ -178,19 +178,9 @@
     lucide.createIcons();
   </script>
 
-  <script src="netstudio_booking.js"></script>
-  <script>
-    // Universal Bridge: Maps NetStudio.open -> window.openBooking
-    window.openBooking = window.openBooking || function(serviceId){
-      if (window.NetStudio && typeof window.NetStudio.open === "function") {
-        return window.NetStudio.open(serviceId);
-      }
-      console.warn("Booking engine not ready yet.");
-    };
-  </script>
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
+    // 1. Slug Helper
     function nsGetSlugFromHost() {
       const qp = new URLSearchParams(location.search).get("b");
       if (qp) return String(qp).trim().toLowerCase();
@@ -208,6 +198,7 @@
       return null;
     }
 
+    // 2. Supabase Config
     window.NS = {
       ...(window.NS || {}),
       SUPABASE_URL: "https://jdvdgvolfmvlgyfklbwe.supabase.co",
@@ -218,6 +209,7 @@
     const sb = window.supabaseClient || window.supabase.createClient(window.NS.SUPABASE_URL, window.NS.SUPABASE_ANON_KEY);
     window.supabaseClient = sb;
 
+    // 3. Load Business + Branding
     async function nsLoadBusiness() {
       if (!window.NS.BUSINESS_SLUG) return null;
 
@@ -230,6 +222,7 @@
       if (error || !data) return null;
 
       window.BUSINESS_ID = data.id;
+      // Critical: DOM hook for booking engine
       document.body.dataset.businessId = data.id;
 
       return data;
@@ -237,10 +230,8 @@
 
     function nsApplyBranding(biz) {
       if (!biz) return;
-
       const name = (biz.name || "CANVAS").trim();
       const logo = biz.logo_url;
-
       const logoEl = document.getElementById("nsLogo");
       const footerEl = document.getElementById("nsFooterTitle");
 
@@ -249,28 +240,10 @@
           ? `<img src="${logo}" alt="${name}" style="height:28px; max-width:260px; object-fit:contain;">`
           : `<div class="color-dot"></div>${name.toUpperCase()}.`;
       }
-
       if (footerEl) footerEl.textContent = `${name.toUpperCase()}.`;
     }
 
-    // PATCH 2: Resilient Wiring with Retry Logic
-    function nsWireBookNow() {
-      const topBtn = document.getElementById("nsBookNowBtn");
-      if (!topBtn) return;
-
-      topBtn.addEventListener("click", async () => {
-        // Wait up to 1s for engine to attach
-        const start = Date.now();
-        while (Date.now() - start < 1000) {
-          if (typeof window.openBooking === "function") break;
-          await new Promise(r => setTimeout(r, 25));
-        }
-
-        if (typeof window.openBooking === "function") return window.openBooking();
-        console.warn("openBooking still missing after wait");
-      });
-    }
-
+    // 4. Menu Logic
     async function nsLoadMenuItems() {
       if (!window.BUSINESS_ID) return [];
       const { data, error } = await sb
@@ -311,12 +284,10 @@
       Object.entries(groups).forEach(([section, rows]) => {
         const wrap = document.createElement("div");
         wrap.className = "menu-section";
-
         wrap.innerHTML = `
           <div class="section-head">
             <h3 class="sec-title">${section}</h3>
           </div>
-
           ${rows.map(r => `
             <div class="service-row">
               <div class="svc-info">
@@ -328,11 +299,45 @@
             </div>
           `).join("")}
         `;
-
         mount.appendChild(wrap);
       });
     }
 
+    // 5. Dynamic Engine Loader (The Fix)
+    function nsLoadBookingScript() {
+      // ✅ Correct Path: "./netstudio_booking.js" for Canvas flat structure
+      if (document.querySelector('script[data-ns-booking="1"]')) return;
+      const s = document.createElement("script");
+      s.src = "./netstudio_booking.js"; 
+      s.defer = true;
+      s.dataset.nsBooking = "1";
+      document.body.appendChild(s);
+    }
+
+    // 6. Bridge & Wire
+    window.openBooking = window.openBooking || function(serviceId){
+      // Safety bridge: if engine loaded & exposes NetStudio, use it
+      if (window.NetStudio && typeof window.NetStudio.open === "function") {
+        return window.NetStudio.open(serviceId);
+      }
+      console.warn("Booking engine loading...");
+    };
+
+    function nsWireBookNow() {
+      const topBtn = document.getElementById("nsBookNowBtn");
+      if (!topBtn) return;
+      // Robust retry click handler
+      topBtn.addEventListener("click", async () => {
+        const start = Date.now();
+        while (Date.now() - start < 1500) {
+          if (window.NetStudio) break; // Engine loaded
+          await new Promise(r => setTimeout(r, 50));
+        }
+        window.openBooking && window.openBooking();
+      });
+    }
+
+    // 7. Init
     (async () => {
       const biz = await nsLoadBusiness();
       if (!biz) return;
@@ -342,6 +347,9 @@
 
       const items = await nsLoadMenuItems();
       nsRenderMenu(items);
+      
+      // ✅ Load Engine Last (with correct path)
+      nsLoadBookingScript();
     })();
   </script>
 </body>
