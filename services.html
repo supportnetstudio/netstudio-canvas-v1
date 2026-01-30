@@ -2,251 +2,329 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>MUSE — Service Menu</title>
+  <title>CANVAS — Service Menu</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Oswald:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     /* --- CORE VARIABLES --- */
     :root {
-      --bg: #ffffff;
-      --text: #000000;
-      --accent: #2563eb;
-      --border: #000000;
-      --font-display: 'Oswald', sans-serif;
+      --bg-body: #ffffff;
+      --text-main: #111111;
+      --accent: #3b82f6; /* Cobalt Blue */
+      --surface: #f3f4f6;
+      --border: #111111;
+      --font-display: 'Space Grotesk', sans-serif;
       --font-body: 'Inter', sans-serif;
+      --radius: 16px; 
     }
 
     /* --- RESET --- */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: var(--bg); color: var(--text);
+      background: var(--bg-body); color: var(--text-main);
       font-family: var(--font-body); line-height: 1.5;
       overflow-x: hidden;
     }
 
     /* --- TYPOGRAPHY --- */
-    h1, h2, h3 { font-family: var(--font-display); text-transform: uppercase; line-height: 0.9; }
-    h1 { font-size: clamp(60px, 12vw, 150px); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 20px; }
+    h1, h2, h3 { font-family: var(--font-display); line-height: 1.1; letter-spacing: -0.03em; }
+    h1 { font-size: clamp(48px, 8vw, 80px); font-weight: 700; margin-bottom: 24px; }
+    h2 { font-size: 32px; font-weight: 700; margin-bottom: 20px; }
     
     .label {
-      font-size: 11px; font-weight: 700; text-transform: uppercase; 
-      letter-spacing: 0.1em; border: 1px solid var(--text); 
-      padding: 6px 12px; display: inline-block; margin-bottom: 24px;
+      font-family: var(--font-display); font-weight: 700; font-size: 14px; 
+      text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent);
+      display: inline-block; border: 2px solid var(--accent); padding: 8px 16px;
+      border-radius: 50px; margin-bottom: 24px; background: white;
     }
 
     /* --- UTILITIES --- */
-    .container { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
-    .section-pad { padding: 80px 0; border-bottom: 1px solid var(--border); }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .section-pad { padding: 80px 0; }
     
+    .btn {
+      display: inline-block; background: var(--accent); color: white;
+      padding: 10px 24px; border-radius: 12px; font-family: var(--font-display);
+      font-weight: 700; font-size: 14px; text-decoration: none;
+      transition: 0.2s; border: 2px solid var(--accent);
+      box-shadow: 4px 4px 0px var(--text-main); cursor: pointer;
+    }
+    .btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px var(--text-main); }
+    
+    .btn-outline {
+      background: white; color: var(--text-main); border: 2px solid var(--text-main);
+      padding: 12px 24px; border-radius: 12px; font-family: var(--font-display);
+      font-weight: 700; font-size: 16px; text-decoration: none;
+      box-shadow: 4px 4px 0px var(--text-main);
+    }
+
     /* --- NAVIGATION --- */
     nav {
-      position: fixed; top: 0; width: 100%; z-index: 100;
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 24px; mix-blend-mode: difference; color: white;
+      padding: 24px; display: flex; justify-content: space-between; align-items: center;
+      position: sticky; top: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); z-index: 50;
+      border-bottom: 2px solid var(--text-main);
     }
-    .logo { font-family: var(--font-display); font-size: 32px; font-weight: 700; letter-spacing: -0.05em; }
+    .logo { 
+      font-family: var(--font-display); font-size: 28px; font-weight: 700; 
+      letter-spacing: -0.05em; display: flex; align-items: center; gap: 8px;
+    }
+    .color-dot { width: 12px; height: 12px; background: var(--accent); border-radius: 50%; border: 2px solid var(--text-main); }
     .nav-links { display: flex; gap: 32px; }
-    .nav-links a { color: white; text-decoration: none; font-size: 14px; text-transform: uppercase; font-weight: 600; }
+    .nav-links a { color: var(--text-main); text-decoration: none; font-weight: 600; font-family: var(--font-display); }
     @media(max-width: 768px) { .nav-links { display: none; } }
 
-    /* --- HERO --- */
-    .menu-hero {
-      padding: 160px 24px 80px; border-bottom: 1px solid var(--border);
+    /* --- MENU HEADER --- */
+    .menu-header {
+      padding: 80px 0; border-bottom: 2px solid var(--text-main); margin-bottom: 60px;
+    }
+    
+    .explainer-box {
+      background: var(--surface); padding: 30px; border-radius: var(--radius);
+      border: 2px solid var(--text-main); margin-top: 40px;
+      display: flex; gap: 20px; align-items: flex-start;
+    }
+    .info-icon {
+      min-width: 40px; height: 40px; background: var(--accent); color: white;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      border: 2px solid var(--text-main);
     }
 
-    /* --- LINE SHEET LAYOUT --- */
-    .sheet-grid {
-      display: grid; grid-template-columns: 300px 1fr; 
-      border-bottom: 1px solid var(--border);
+    /* --- MENU GRID --- */
+    .menu-section { margin-bottom: 80px; }
+    .section-head { 
+      display: flex; justify-content: space-between; align-items: flex-end; 
+      margin-bottom: 40px; border-bottom: 2px solid #e5e5e5; padding-bottom: 20px;
     }
-    .sheet-header {
-      padding: 40px 24px; border-right: 1px solid var(--border);
-      font-family: var(--font-display); font-size: 60px; text-transform: uppercase;
-      position: sticky; top: 80px; height: fit-content;
-    }
-    
-    @media(max-width: 900px) {
-      .sheet-grid { grid-template-columns: 1fr; }
-      .sheet-header { 
-        border-right: none; border-bottom: 1px solid var(--border); 
-        padding: 24px; font-size: 40px; position: static;
-      }
-    }
+    .sec-title { font-size: 32px; font-weight: 700; font-family: var(--font-display); }
 
-    /* --- SERVICE ITEM --- */
-    .service-item {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 30px 40px; border-bottom: 1px solid #e5e5e5;
-      transition: 0.2s;
+    .service-row {
+      display: grid; grid-template-columns: 2fr 1fr 150px; gap: 20px; align-items: center;
+      padding: 24px; border: 2px solid transparent; border-radius: 12px;
+      margin-bottom: 12px; transition: 0.2s;
     }
-    .service-item:hover { background: #f8f8f8; }
-    .service-item:last-child { border-bottom: none; }
-    
-    .item-left { max-width: 70%; }
-    .item-name { 
-      font-family: var(--font-display); font-size: 24px; font-weight: 500; 
-      text-transform: uppercase; margin-bottom: 4px; display: block;
+    .service-row:hover {
+      border-color: var(--text-main); background: white; box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
     }
-    .item-meta { 
-      font-size: 12px; color: #666; font-family: 'Inter', monospace; text-transform: uppercase; 
-    }
+    .service-row:nth-child(even) { background: #fafafa; }
+    .service-row:nth-child(even):hover { background: white; }
 
-    .item-right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
-    .item-price { font-family: var(--font-display); font-size: 20px; font-weight: 600; }
+    .svc-info h4 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+    .svc-desc { font-size: 14px; color: #666; }
     
-    .book-tag {
-      font-size: 10px; font-weight: 700; text-transform: uppercase; 
-      padding: 4px 8px; background: var(--text); color: var(--bg);
-      opacity: 0; transform: translateY(5px); transition: 0.2s;
-    }
-    .service-item:hover .book-tag { opacity: 1; transform: translateY(0); }
-    
+    .svc-price { font-family: var(--font-display); font-weight: 700; font-size: 20px; color: var(--accent); }
+
     @media(max-width: 768px) {
-      .service-item { padding: 24px; align-items: flex-start; }
-      .book-tag { opacity: 1; transform: translateY(0); background: transparent; color: var(--text); border: 1px solid var(--text); padding: 4px 10px; }
+      .service-row { grid-template-columns: 1fr; gap: 16px; padding: 20px; border: 2px solid #eee; }
+      .svc-price { margin-bottom: 10px; display: block; }
+      .section-head { flex-direction: column; align-items: flex-start; gap: 10px; }
     }
 
     /* --- FOOTER --- */
-    footer { padding: 80px 24px; background: var(--text); color: var(--bg); text-align: center; }
-    .footer-links { display: flex; justify-content: center; gap: 24px; margin-bottom: 40px; }
-    .footer-links a { color: var(--bg); text-decoration: none; text-transform: uppercase; font-size: 12px; }
+    footer { padding: 60px 24px; text-align: center; background: #111; color: white; margin-top: 80px; }
 
   </style>
 </head>
 <body>
 
   <nav>
-    <div class="logo">MUSE.</div>
+    <div class="logo" id="nsLogo">
+      <div class="color-dot"></div>
+      CANVAS.
+    </div>
     <div class="nav-links">
       <a href="index.html">Home</a>
-      <a href="about.html">Manifesto</a>
-      <a href="services.html" class="active">Menu</a>
-      <a href="contact.html">Contact</a>
+      <a href="about.html">Philosophy</a>
+      <a href="services.html" class="active">Services</a>
+      <a href="team.html">Artists</a>
     </div>
-    <div style="font-weight: 600; text-transform: uppercase; font-size: 14px;">Book Now</div>
+    <button type="button" class="btn" id="nsBookNowBtn" style="padding: 10px 24px; font-size: 16px;">
+      Book Now
+    </button>
   </nav>
 
-  <header class="menu-hero">
-    <div class="label">Line Sheet 2026</div>
-    <h1>The Index.</h1>
+  <header class="container menu-header">
+    <div class="label">The Menu</div>
+    <h1>Transparent Pricing.</h1>
+    
+    <div class="explainer-box">
+      <div class="info-icon"><i data-lucide="clock"></i></div>
+      <div>
+        <h4 style="font-weight: 700; margin-bottom: 8px;">How Hourly Pricing Works</h4>
+        <p style="font-size: 15px; color: #555;">
+          We charge by the time booked, not by gender. Gratuity is already included in the price. 
+          If you have extra thick hair or want a major change, please book the "Transformation" block.
+        </p>
+      </div>
+    </div>
   </header>
 
-  <div class="sheet-grid">
-    <div class="sheet-header">Cut</div>
-    <div>
-      <div class="service-item" onclick="openBooking()">
-        <div class="item-left">
-          <span class="item-name">The Muse Cut</span>
-          <span class="item-meta">Wash / Massage / Architectural Shape / Style</span>
-        </div>
-        <div class="item-right">
-          <span class="item-price">$90+</span>
-          <span class="book-tag">Select</span>
-        </div>
-      </div>
-      <div class="service-item" onclick="openBooking()">
-        <div class="item-left">
-          <span class="item-name">Wolf / Shag</span>
-          <span class="item-meta">Razor Technique / Heavy Texture / Diffuse</span>
-        </div>
-        <div class="item-right">
-          <span class="item-price">$110+</span>
-          <span class="book-tag">Select</span>
-        </div>
-      </div>
-      <div class="service-item" onclick="openBooking()">
-        <div class="item-left">
-          <span class="item-name">Fringe Trim</span>
-          <span class="item-meta">Bangs / Face Framing / Maintenance</span>
-        </div>
-        <div class="item-right">
-          <span class="item-price">$25</span>
-          <span class="book-tag">Select</span>
-        </div>
-      </div>
-    </div>
-  </div>
+  <main class="container">
+    
+    <div id="nsMenuMount"></div>
 
-  <div class="sheet-grid">
-    <div class="sheet-header">Color</div>
-    <div>
-      <div class="service-item" onclick="openBooking()">
-        <div class="item-left">
-          <span class="item-name">Global Bleach</span>
-          <span class="item-meta">Scalp Application / Bond Builder / Toner</span>
-        </div>
-        <div class="item-right">
-          <span class="item-price">$220+</span>
-          <span class="book-tag">Select</span>
-        </div>
-      </div>
-      <div class="service-item" onclick="openBooking()">
-        <div class="item-left">
-          <span class="item-name">Vivids (Fashion Color)</span>
-          <span class="item-meta">Requires Consultation / Charged Hourly</span>
-        </div>
-        <div class="item-right">
-          <span class="item-price">$120/hr</span>
-          <span class="book-tag">Select</span>
-        </div>
-      </div>
-      <div class="service-item" onclick="openBooking()">
-        <div class="item-left">
-          <span class="item-name">Corrective Color</span>
-          <span class="item-meta">Total Transformation / Charged Hourly</span>
-        </div>
-        <div class="item-right">
-          <span class="item-price">$150/hr</span>
-          <span class="book-tag">Select</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="sheet-grid">
-    <div class="sheet-header">Style</div>
-    <div>
-      <div class="service-item" onclick="openBooking()">
-        <div class="item-left">
-          <span class="item-name">Blowout</span>
-          <span class="item-meta">Wash / Round Brush / Volume</span>
-        </div>
-        <div class="item-right">
-          <span class="item-price">$55</span>
-          <span class="book-tag">Select</span>
-        </div>
-      </div>
-      <div class="service-item" onclick="openBooking()">
-        <div class="item-left">
-          <span class="item-name">Editorial Styling</span>
-          <span class="item-meta">Updo / Braiding / Photoshoot Prep</span>
-        </div>
-        <div class="item-right">
-          <span class="item-price">$100+</span>
-          <span class="book-tag">Select</span>
-        </div>
-      </div>
-    </div>
-  </div>
+  </main>
 
   <footer>
-    <h2 style="margin-bottom: 40px;">MUSE.</h2>
-    <div class="footer-links">
-      <a href="#">Instagram</a>
-      <a href="#">TikTok</a>
-      <a href="#">Contact</a>
+    <div id="nsFooterTitle" style="font-family: var(--font-display); font-size: 32px; font-weight: 700; margin-bottom: 20px;">
+      CANVAS.
     </div>
-    <div style="font-size: 12px; color: #888;">© 2026 Muse Studio. Powered by Net Studio.</div>
+    <p style="color: #888; font-size: 14px;">© 2026 Canvas Studio. A Safe Space for All.</p>
   </footer>
 
   <script>
     lucide.createIcons();
-    function openBooking() { console.log("Open Widget"); }
   </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    function nsGetSlugFromHost() {
+      const qp = new URLSearchParams(location.search).get("b");
+      if (qp) return String(qp).trim().toLowerCase();
+
+      const host = (location.hostname || "").toLowerCase();
+      if (!host || host === "localhost" || host.startsWith("127.")) return null;
+
+      const ROOT = "netstudiodevelopment.com";
+      if (host === ROOT || host === "www." + ROOT) return null;
+
+      if (host.endsWith("." + ROOT)) {
+        const slug = host.slice(0, -(ROOT.length + 1)).split(".")[0];
+        return slug || null;
+      }
+      return null;
+    }
+
+    window.NS = {
+      ...(window.NS || {}),
+      SUPABASE_URL: "https://jdvdgvolfmvlgyfklbwe.supabase.co",
+      SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkdmRndm9sZm12bGd5ZmtsYndlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1Mjk5MDgsImV4cCI6MjA3OTEwNTkwOH0.xiAOgWof9En3jbCpY1vrYpj3HD-O6jMHbamIHTSflek",
+      BUSINESS_SLUG: nsGetSlugFromHost()
+    };
+
+    const sb = window.supabaseClient || window.supabase.createClient(window.NS.SUPABASE_URL, window.NS.SUPABASE_ANON_KEY);
+    window.supabaseClient = sb;
+
+    async function nsLoadBusiness() {
+      if (!window.NS.BUSINESS_SLUG) return null;
+
+      const { data, error } = await sb
+        .from("business")
+        .select("id,name,logo_url")
+        .eq("slug", window.NS.BUSINESS_SLUG)
+        .maybeSingle();
+
+      if (error || !data) return null;
+
+      window.BUSINESS_ID = data.id;
+
+      // ✅ critical for universal booking engine (DOM > Cache > URL)
+      document.body.dataset.businessId = data.id;
+
+      return data;
+    }
+
+    function nsApplyBranding(biz) {
+      if (!biz) return;
+
+      const name = (biz.name || "CANVAS").trim();
+      const logo = biz.logo_url;
+
+      const logoEl = document.getElementById("nsLogo");
+      const footerEl = document.getElementById("nsFooterTitle");
+
+      if (logoEl) {
+        logoEl.innerHTML = logo
+          ? `<img src="${logo}" alt="${name}" style="height:28px; max-width:260px; object-fit:contain;">`
+          : `<div class="color-dot"></div>${name.toUpperCase()}.`;
+      }
+
+      if (footerEl) footerEl.textContent = `${name.toUpperCase()}.`;
+    }
+
+    function nsWireBookNow() {
+      const topBtn = document.getElementById("nsBookNowBtn");
+      if (topBtn) topBtn.addEventListener("click", () => window.openBooking && window.openBooking());
+    }
+
+    async function nsLoadMenuItems() {
+      if (!window.BUSINESS_ID) return [];
+      const { data, error } = await sb
+        .from("menu_items")
+        .select("id,section,name,description,price,price_cents,is_active")
+        .eq("business_id", window.BUSINESS_ID)
+        .eq("is_active", true)
+        .order("section", { ascending: true })
+        .order("name", { ascending: true });
+
+      if (error) return [];
+      return data || [];
+    }
+
+    function nsMoney(row) {
+      if (typeof row.price_cents === "number") return `$${(row.price_cents / 100).toFixed(2)}`;
+      if (row.price != null && row.price !== "") return String(row.price);
+      return "";
+    }
+
+    function nsRenderMenu(items) {
+      const mount = document.getElementById("nsMenuMount");
+      if (!mount) return;
+
+      if (!items.length) {
+        mount.innerHTML = `<div style="padding:40px 0;">No services found.</div>`;
+        return;
+      }
+
+      const groups = {};
+      items.forEach(i => {
+        const sec = (i.section || "Services").trim();
+        (groups[sec] ||= []).push(i);
+      });
+
+      mount.innerHTML = "";
+
+      Object.entries(groups).forEach(([section, rows]) => {
+        const wrap = document.createElement("div");
+        wrap.className = "menu-section";
+
+        wrap.innerHTML = `
+          <div class="section-head">
+            <h3 class="sec-title">${section}</h3>
+          </div>
+
+          ${rows.map(r => `
+            <div class="service-row">
+              <div class="svc-info">
+                <h4>${r.name || ""}</h4>
+                <div class="svc-desc">${r.description || ""}</div>
+              </div>
+              <div class="svc-price">${nsMoney(r)}</div>
+              <button type="button" class="btn" onclick="window.openBooking && window.openBooking('${r.id}')">Book</button>
+            </div>
+          `).join("")}
+        `;
+
+        mount.appendChild(wrap);
+      });
+    }
+
+    (async () => {
+      const biz = await nsLoadBusiness();
+      if (!biz) return;
+
+      nsApplyBranding(biz);
+      nsWireBookNow();
+
+      const items = await nsLoadMenuItems();
+      nsRenderMenu(items);
+    })();
+  </script>
+
+  <script src="netstudio_booking.js"></script>
 </body>
 </html>
