@@ -2,280 +2,310 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>MUSE — The Agency</title>
+  <title>CANVAS — The Collective</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Oswald:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     /* --- CORE VARIABLES --- */
     :root {
-      --bg: #ffffff;
-      --text: #000000;
-      --accent: #2563eb;
-      --border: #000000;
-      --font-display: 'Oswald', sans-serif;
+      --bg-body: #ffffff;
+      --text-main: #111111;
+      --accent: #3b82f6; /* Cobalt Blue */
+      --surface: #f3f4f6;
+      --border: #111111;
+      --font-display: 'Space Grotesk', sans-serif;
       --font-body: 'Inter', sans-serif;
+      --radius: 16px; 
     }
 
     /* --- RESET --- */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: var(--bg); color: var(--text);
+      background: var(--bg-body); color: var(--text-main);
       font-family: var(--font-body); line-height: 1.5;
       overflow-x: hidden;
     }
 
     /* --- TYPOGRAPHY --- */
-    h1, h2, h3 { font-family: var(--font-display); text-transform: uppercase; line-height: 0.9; }
-    h1 { font-size: clamp(60px, 12vw, 150px); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 20px; }
+    h1, h2, h3 { font-family: var(--font-display); line-height: 1.1; letter-spacing: -0.03em; }
+    h1 { font-size: clamp(48px, 8vw, 80px); font-weight: 700; margin-bottom: 24px; }
+    h2 { font-size: 32px; font-weight: 700; margin-bottom: 16px; }
     
     .label {
-      font-size: 11px; font-weight: 700; text-transform: uppercase; 
-      letter-spacing: 0.1em; border: 1px solid var(--text); 
-      padding: 6px 12px; display: inline-block; margin-bottom: 24px;
+      font-family: var(--font-display); font-weight: 700; font-size: 14px; 
+      text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent);
+      display: inline-block; border: 2px solid var(--accent); padding: 8px 16px;
+      border-radius: 50px; margin-bottom: 24px; background: white;
     }
 
     /* --- UTILITIES --- */
-    .container { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .section-pad { padding: 80px 0; }
     
-    .btn-outline {
-      background: transparent; color: var(--text); border: 1px solid var(--text);
-      padding: 12px 24px; font-weight: 600; text-transform: uppercase;
-      font-size: 12px; letter-spacing: 0.05em; text-decoration: none;
-      transition: 0.3s; display: inline-block; cursor: pointer;
+    .btn {
+      display: inline-block; background: var(--accent); color: white;
+      padding: 12px 24px; border-radius: 12px; font-family: var(--font-display);
+      font-weight: 700; font-size: 16px; text-decoration: none;
+      transition: 0.2s; border: 2px solid var(--accent);
+      box-shadow: 4px 4px 0px var(--text-main); cursor: pointer;
     }
-    .btn-outline:hover { background: var(--text); color: var(--bg); }
+    .btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px var(--text-main); }
 
     /* --- NAVIGATION --- */
     nav {
-      position: fixed; top: 0; width: 100%; z-index: 100;
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 24px; mix-blend-mode: difference; color: white;
+      padding: 24px; display: flex; justify-content: space-between; align-items: center;
+      position: sticky; top: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); z-index: 50;
+      border-bottom: 2px solid var(--text-main);
     }
-    .logo { font-family: var(--font-display); font-size: 32px; font-weight: 700; letter-spacing: -0.05em; }
+    .logo { 
+      font-family: var(--font-display); font-size: 28px; font-weight: 700; 
+      letter-spacing: -0.05em; display: flex; align-items: center; gap: 8px;
+    }
+    .color-dot { width: 12px; height: 12px; background: var(--accent); border-radius: 50%; border: 2px solid var(--text-main); }
     .nav-links { display: flex; gap: 32px; }
-    .nav-links a { color: white; text-decoration: none; font-size: 14px; text-transform: uppercase; font-weight: 600; }
+    .nav-links a { color: var(--text-main); text-decoration: none; font-weight: 600; font-family: var(--font-display); }
     @media(max-width: 768px) { .nav-links { display: none; } }
 
     /* --- HERO --- */
     .team-hero {
-      padding: 160px 24px 80px; border-bottom: 1px solid var(--border);
+      text-align: center; padding: 80px 24px 60px;
     }
 
-    /* --- AGENCY GRID --- */
-    .agency-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr); 
-      border-bottom: 1px solid var(--border);
+    /* --- ROSTER GRID --- */
+    .roster-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-bottom: 80px;
     }
-    @media(max-width: 1200px) { .agency-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media(max-width: 600px) { .agency-grid { grid-template-columns: 1fr; } }
+    @media(max-width: 900px) { .roster-grid { grid-template-columns: 1fr 1fr; } }
+    @media(max-width: 600px) { .roster-grid { grid-template-columns: 1fr; } }
 
     /* --- ARTIST CARD --- */
     .artist-card {
-      border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
-      position: relative; group; overflow: hidden;
-      display: flex; flex-direction: column;
+      background: var(--surface); border: 2px solid var(--text-main); border-radius: var(--radius);
+      padding: 20px; text-align: center; transition: 0.3s;
     }
-    /* Remove border on last item of row based on columns */
-    .artist-card:nth-child(4n) { border-right: none; } 
-    @media(max-width: 1200px) { 
-      .artist-card:nth-child(4n) { border-right: 1px solid var(--border); } 
-      .artist-card:nth-child(2n) { border-right: none; } 
-    }
-    @media(max-width: 600px) { .artist-card { border-right: none; } }
+    .artist-card:hover { transform: translateY(-8px); box-shadow: 8px 8px 0px var(--text-main); }
 
+    .img-box {
+      width: 100%; aspect-ratio: 1/1; border-radius: 12px; overflow: hidden;
+      border: 2px solid var(--text-main); margin-bottom: 20px;
+      position: relative;
+    }
+    .artist-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); transition: 0.3s; }
+    .artist-card:hover .artist-img { filter: grayscale(0%); }
 
-    .img-frame {
-      width: 100%; aspect-ratio: 3/4; overflow: hidden; position: relative;
+    /* Pronoun Badge */
+    .pronoun-badge {
+      position: absolute; bottom: 10px; right: 10px;
+      background: white; border: 2px solid var(--text-main); border-radius: 50px;
+      font-size: 10px; font-weight: 700; padding: 4px 10px; text-transform: uppercase;
+      box-shadow: 2px 2px 0px var(--text-main);
     }
-    .artist-img {
-      width: 100%; height: 100%; object-fit: cover; 
-      filter: grayscale(100%); transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
-    .artist-card:hover .artist-img { filter: grayscale(0%); transform: scale(1.03); }
 
-    /* INFO AREA */
-    .artist-info {
-      padding: 24px; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1;
-    }
-    
-    .meta-top { margin-bottom: 20px; }
-    .role-tag { font-family: var(--font-body); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #666; margin-bottom: 4px; display: block; }
-    .name-big { font-family: var(--font-display); font-size: 40px; text-transform: uppercase; line-height: 0.9; }
-
-    .action-row {
-      display: flex; gap: 10px; margin-top: auto;
-    }
-    .btn-small {
-      flex: 1; text-align: center; border: 1px solid var(--text); padding: 10px;
-      font-size: 11px; font-weight: 700; text-transform: uppercase; text-decoration: none;
-      color: var(--text); transition: 0.2s;
-    }
-    .btn-small:hover { background: var(--text); color: var(--bg); }
-    .btn-accent { background: var(--text); color: var(--bg); }
-    .btn-accent:hover { background: var(--accent); border-color: var(--accent); color: white; }
-
-    /* --- HIRING BANNER --- */
-    .hiring-banner {
-      padding: 80px 24px; text-align: center; background: #000; color: #fff;
-    }
+    .artist-name { font-size: 24px; font-weight: 700; margin-bottom: 4px; font-family: var(--font-display); }
+    .artist-role { font-size: 14px; font-weight: 600; color: #666; margin-bottom: 20px; display: block; text-transform: uppercase; letter-spacing: 0.05em; }
 
     /* --- FOOTER --- */
-    footer { padding: 80px 24px; background: var(--text); color: var(--bg); text-align: center; }
-    .footer-links { display: flex; justify-content: center; gap: 24px; margin-bottom: 40px; }
-    .footer-links a { color: var(--bg); text-decoration: none; text-transform: uppercase; font-size: 12px; }
+    footer { padding: 60px 24px; text-align: center; background: #111; color: white; }
 
   </style>
 </head>
 <body>
 
   <nav>
-    <div class="logo">MUSE.</div>
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="about.html">Manifesto</a>
-      <a href="services.html">Menu</a>
-      <a href="team.html" class="active">Agency</a>
+    <div class="logo" id="ns_brand">
+      <div class="color-dot"></div>
+      CANVAS.
     </div>
-    <div style="font-weight: 600; text-transform: uppercase; font-size: 14px;">Book Now</div>
+    <div class="nav-links">
+      <a href="about.html">Philosophy</a>
+      <a href="services.html">Services</a>
+      <a href="team.html">Artists</a>
+    </div>
+    <a href="#book" class="btn" style="padding: 10px 24px; font-size: 16px;" onclick="nsOpenBooking(); return false;">Book Now</a>
   </nav>
 
-  <header class="team-hero">
-    <div class="label">Representing</div>
-    <h1>The Agency.</h1>
+  <header class="team-hero container">
+    <div class="label">The Roster</div>
+    <h1>Meet The Collective.</h1>
+    <p style="font-size: 18px; max-width: 600px; margin: 0 auto; color: #555;">
+      We are a team of independent artists united by a shared philosophy: 
+      Respect the hair, respect the human.
+    </p>
   </header>
 
-  <div class="agency-grid">
-
-    <div class="artist-card">
-      <div class="img-frame">
-        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=600" class="artist-img">
-      </div>
-      <div class="artist-info">
-        <div class="meta-top">
-          <span class="role-tag">Creative Director</span>
-          <div class="name-big">Sasha</div>
-        </div>
-        <div class="action-row">
-          <a href="muse_profile.html" class="btn-small">Portfolio</a>
-          <button class="btn-small btn-accent" onclick="openBooking()">Book</button>
-        </div>
-      </div>
+  <main class="container">
+    <div class="roster-grid" id="roster_grid">
+      <div style="grid-column:1/-1;text-align:center;padding:60px 0;color:#888;">Loading collective...</div>
     </div>
-
-    <div class="artist-card">
-      <div class="img-frame">
-        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=600" class="artist-img">
-      </div>
-      <div class="artist-info">
-        <div class="meta-top">
-          <span class="role-tag">Senior Barber</span>
-          <div class="name-big">Kairo</div>
-        </div>
-        <div class="action-row">
-          <a href="muse_profile.html" class="btn-small">Portfolio</a>
-          <button class="btn-small btn-accent" onclick="openBooking()">Book</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="artist-card">
-      <div class="img-frame">
-        <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&q=80&w=600" class="artist-img">
-      </div>
-      <div class="artist-info">
-        <div class="meta-top">
-          <span class="role-tag">Colorist</span>
-          <div class="name-big">Jinx</div>
-        </div>
-        <div class="action-row">
-          <a href="muse_profile.html" class="btn-small">Portfolio</a>
-          <button class="btn-small btn-accent" onclick="openBooking()">Book</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="artist-card">
-      <div class="img-frame">
-        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=600" class="artist-img">
-      </div>
-      <div class="artist-info">
-        <div class="meta-top">
-          <span class="role-tag">Junior Stylist</span>
-          <div class="name-big">Nico</div>
-        </div>
-        <div class="action-row">
-          <a href="muse_profile.html" class="btn-small">Portfolio</a>
-          <button class="btn-small btn-accent" onclick="openBooking()">Book</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="artist-card">
-      <div class="img-frame">
-        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=600" class="artist-img">
-      </div>
-      <div class="artist-info">
-        <div class="meta-top">
-          <span class="role-tag">Texture Specialist</span>
-          <div class="name-big">Ria</div>
-        </div>
-        <div class="action-row">
-          <a href="muse_profile.html" class="btn-small">Portfolio</a>
-          <button class="btn-small btn-accent" onclick="openBooking()">Book</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="artist-card">
-      <div class="img-frame">
-        <img src="https://images.unsplash.com/photo-1520338661084-680395057c93?auto=format&fit=crop&q=80&w=600" class="artist-img">
-      </div>
-      <div class="artist-info">
-        <div class="meta-top">
-          <span class="role-tag">Editorial</span>
-          <div class="name-big">Ezra</div>
-        </div>
-        <div class="action-row">
-          <a href="muse_profile.html" class="btn-small">Portfolio</a>
-          <button class="btn-small btn-accent" onclick="openBooking()">Book</button>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="hiring-banner">
-    <h2 style="font-size: 40px; margin-bottom: 20px;">Join The Roster.</h2>
-    <p style="margin-bottom: 30px; font-size: 18px; color: #ccc;">We are always looking for non-conformist talent.</p>
-    <a href="contact.html" class="btn-outline" style="border-color: white; color: white;">Apply Now</a>
-  </div>
+  </main>
 
   <footer>
-    <h2 style="margin-bottom: 40px;">MUSE.</h2>
-    <div class="footer-links">
-      <a href="#">Instagram</a>
-      <a href="#">TikTok</a>
-      <a href="#">Contact</a>
-    </div>
-    <div style="font-size: 12px; color: #888;">© 2026 Muse Studio. Powered by Net Studio.</div>
+    <div id="ns_footer_brand" style="font-family: var(--font-display); font-size: 32px; font-weight: 700; margin-bottom: 14px;">CANVAS.</div>
+    <p id="ns_footer_address" style="color:#bbb;font-size:14px;margin-bottom:10px;"></p>
+    <p style="color: #888; font-size: 14px;">© 2026 Canvas Studio. A Safe Space for All.</p>
   </footer>
 
-  <script src="netstudio_engine.js"></script>
+  <script src="/netstudio_booking.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
   <script>
     lucide.createIcons();
-    function openBooking() { 
-      if(typeof NetStudio !== 'undefined') {
-        NetStudio.open(); 
-      } else {
-        console.log("Engine not loaded yet");
+
+    function nsGetSlugFromHost() {
+      const qp = new URLSearchParams(location.search).get("b");
+      if (qp) return String(qp).trim().toLowerCase();
+
+      const host = (location.hostname || "").toLowerCase();
+      if (!host || host === "localhost" || host.startsWith("127.")) return null;
+
+      const ROOT = "netstudiodevelopment.com";
+      if (host === ROOT || host === "www." + ROOT) return null;
+
+      if (host.endsWith("." + ROOT)) {
+        const slug = host.slice(0, -(ROOT.length + 1)).split(".")[0];
+        return slug || null;
       }
+      return null;
     }
+
+    // ✅ ONE booking bridge for all templates
+    function nsOpenBooking(payload = {}) {
+      if (window.NetStudio && typeof window.NetStudio.open === "function") {
+        window.NetStudio.open(payload);
+        return;
+      }
+      if (typeof window.openBooking === "function") {
+        window.openBooking(payload);
+        return;
+      }
+      console.warn("Booking engine not available yet");
+    }
+
+    /* --- UI HELPER --- */
+    function escapeHtml(s) {
+      return String(s || "").replace(/[&<>"']/g, c => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"
+      }[c]));
+    }
+
+    // --- Supabase ---
+    const SB_URL = "https://jdvdgvolfmvlgyfklbwe.supabase.co";
+    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkdmRndm9sZm12bGd5ZmtsYndlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1Mjk5MDgsImV4cCI6MjA3OTEwNTkwOH0.xiAOgWof9En3jbCpY1vrYpj3HD-O6jMHbamIHTSflek";
+    const sb = supabase.createClient(SB_URL, SB_KEY);
+
+    const BUSINESS_SLUG = nsGetSlugFromHost();
+
+    async function nsApplyBrand() {
+      if (!BUSINESS_SLUG) return null;
+
+      const { data: biz } = await sb
+        .schema("public")
+        .from("business")
+        .select("id,name,street_address,city,state")
+        .eq("slug", BUSINESS_SLUG)
+        .maybeSingle();
+
+      if (!biz?.id) return null;
+
+      // Header brand (preserve the color dot)
+      const b1 = document.getElementById("ns_brand");
+      if (b1 && biz.name) {
+        // Find the text node after the dot and replace it
+        b1.childNodes[b1.childNodes.length - 1].textContent = " " + biz.name.toUpperCase() + ".";
+      }
+
+      // Footer brand
+      const b2 = document.getElementById("ns_footer_brand");
+      if (b2 && biz.name) b2.textContent = biz.name.toUpperCase() + ".";
+
+      // Footer address
+      const addr = document.getElementById("ns_footer_address");
+      if (addr && biz.street_address) {
+        addr.textContent = [biz.street_address, biz.city, biz.state].filter(Boolean).join(", ");
+      }
+
+      return biz;
+    }
+
+    function renderTeam(members) {
+      const grid = document.getElementById("roster_grid");
+      if (!grid) return;
+
+      grid.innerHTML = "";
+
+      if (!members.length) {
+        grid.innerHTML = `
+          <div style="grid-column:1/-1;text-align:center;padding:60px 0;color:#888;">
+            No active artists found.
+          </div>
+        `;
+        return;
+      }
+
+      const fallbackImg =
+        "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=600";
+
+      members.forEach(m => {
+        const id = String(m.id || "").trim();
+        const name = escapeHtml(m.name || "Artist");
+        const role = escapeHtml(m.role || "Stylist");
+        const img = escapeHtml(m.profile_image_url || m.photo_url || fallbackImg);
+
+        // Render Canvas Card
+        grid.insertAdjacentHTML("beforeend", `
+          <div class="artist-card">
+            <div class="img-box">
+              <img src="${img}" class="artist-img" alt="${name}">
+              </div>
+            <div class="artist-name">${name}</div>
+            <span class="artist-role">${role}</span>
+            <button class="btn" style="width:100%; font-size: 14px;" 
+              onclick="nsOpenBooking({ staff_id: '${id}' }); return false;">
+              Book ${name}
+            </button>
+          </div>
+        `);
+      });
+
+      // Add "Join Us" card at end
+      grid.insertAdjacentHTML("beforeend", `
+        <div class="artist-card" style="background: var(--text-main); color: white; display:flex; flex-direction: column; justify-content: center;">
+          <div style="font-size: 48px; margin-bottom: 20px;">👋</div>
+          <div class="artist-name" style="color: white;">Join Us</div>
+          <p style="font-size: 14px; margin-bottom: 24px; color: #ccc;">Are you an independent artist looking for a home?</p>
+          <button class="btn" style="width:100%; font-size: 14px; background: white; color: black; border-color: white;" onclick="window.location.href='contact.html'">Apply Now</button>
+        </div>
+      `);
+    }
+
+    async function nsWireCardsToTeamMembers() {
+      const biz = await nsApplyBrand();
+      if (!biz?.id) return;
+
+      // ✅ RULE: active + logged-in only
+      const { data: members, error } = await sb
+        .schema("public")
+        .from("team_members")
+        .select("id,name,role,profile_image_url,photo_url,auth_user_id,is_active,created_at")
+        .eq("business_id", biz.id)
+        .eq("is_active", true)
+        .not("auth_user_id", "is", null)
+        .order("created_at", { ascending: true });
+
+      if (error) {
+        console.warn("Error loading team:", error);
+        return;
+      }
+
+      renderTeam(members || []);
+    }
+
+    nsWireCardsToTeamMembers();
   </script>
 </body>
 </html>
