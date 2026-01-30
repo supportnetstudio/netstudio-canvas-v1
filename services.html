@@ -164,9 +164,7 @@
   </header>
 
   <main class="container">
-    
     <div id="nsMenuMount"></div>
-
   </main>
 
   <footer>
@@ -178,6 +176,17 @@
 
   <script>
     lucide.createIcons();
+  </script>
+
+  <script src="netstudio_booking.js"></script>
+  <script>
+    // Universal Bridge: Maps NetStudio.open -> window.openBooking
+    window.openBooking = window.openBooking || function(serviceId){
+      if (window.NetStudio && typeof window.NetStudio.open === "function") {
+        return window.NetStudio.open(serviceId);
+      }
+      console.warn("Booking engine not ready yet.");
+    };
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -221,8 +230,6 @@
       if (error || !data) return null;
 
       window.BUSINESS_ID = data.id;
-
-      // ✅ critical for universal booking engine (DOM > Cache > URL)
       document.body.dataset.businessId = data.id;
 
       return data;
@@ -246,9 +253,22 @@
       if (footerEl) footerEl.textContent = `${name.toUpperCase()}.`;
     }
 
+    // PATCH 2: Resilient Wiring with Retry Logic
     function nsWireBookNow() {
       const topBtn = document.getElementById("nsBookNowBtn");
-      if (topBtn) topBtn.addEventListener("click", () => window.openBooking && window.openBooking());
+      if (!topBtn) return;
+
+      topBtn.addEventListener("click", async () => {
+        // Wait up to 1s for engine to attach
+        const start = Date.now();
+        while (Date.now() - start < 1000) {
+          if (typeof window.openBooking === "function") break;
+          await new Promise(r => setTimeout(r, 25));
+        }
+
+        if (typeof window.openBooking === "function") return window.openBooking();
+        console.warn("openBooking still missing after wait");
+      });
     }
 
     async function nsLoadMenuItems() {
@@ -324,7 +344,5 @@
       nsRenderMenu(items);
     })();
   </script>
-
-  <script src="netstudio_booking.js"></script>
 </body>
 </html>
