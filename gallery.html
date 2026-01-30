@@ -15,7 +15,7 @@
     window.nsOpenBooking = window.nsOpenBooking || function(payload = {}) {
       if (window.NetStudio && typeof window.NetStudio.open === "function") return window.NetStudio.open(payload);
       if (typeof window.openBooking === "function") return window.openBooking(payload);
-      console.warn("Booking engine not loaded yet");
+      console.warn("Booking engine loading...");
     };
   </script>
 
@@ -171,7 +171,6 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="/netstudio_booking.js"></script>
   
   <script>
     if (window.lucide) lucide.createIcons();
@@ -187,17 +186,40 @@
       return null;
     }
 
-    // ✅ Booking Bridge
-    function nsOpenBooking(payload = {}) {
-      if (window.NetStudio && typeof window.NetStudio.open === "function") {
-        window.NetStudio.open(payload);
-        return;
-      }
-      if (typeof window.openBooking === "function") {
-        window.openBooking(payload);
-        return;
-      }
-      console.warn("Booking engine not loaded");
+    // ✅ PATCH 2: Context Helper
+    function nsSetBusinessContext(businessId) {
+      if (!businessId) return;
+      // Global
+      window.NS_BUSINESS_ID = businessId;
+      // DOM
+      document.documentElement.setAttribute("data-business-id", businessId);
+      if (document.body) document.body.setAttribute("data-business-id", businessId);
+      // Cache
+      try {
+        localStorage.setItem("ns_business_id", businessId);
+        sessionStorage.setItem("ns_business_id", businessId);
+      } catch(e) {}
+      // URL Param
+      try {
+        const u = new URL(location.href);
+        if (!u.searchParams.get("business_id")) {
+          u.searchParams.set("business_id", businessId);
+          history.replaceState({}, "", u.toString());
+        }
+      } catch(e) {}
+    }
+
+    // ✅ PATCH 3: Dynamic Script Loader
+    function nsLoadBookingEngine() {
+      return new Promise((resolve) => {
+        if (window.openBooking || (window.NetStudio && typeof window.NetStudio.open === "function")) return resolve(true);
+        const s = document.createElement("script");
+        s.src = "/netstudio_booking.js";
+        s.async = true;
+        s.onload = () => resolve(true);
+        s.onerror = () => resolve(false);
+        document.body.appendChild(s);
+      });
     }
 
     /* --- DATA & RENDER --- */
@@ -281,9 +303,9 @@
       
       if (!biz) return;
 
-      // ✅ PATCH: Inject Business ID for Booking Engine
-      window.NS_BUSINESS_ID = biz.id;
-      document.documentElement.setAttribute("data-business-id", biz.id);
+      // ✅ PATCH 4: Set Context & Load Engine NOW
+      nsSetBusinessContext(biz.id);
+      await nsLoadBookingEngine();
 
       // BRANDING
       if (biz.name) {
