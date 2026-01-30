@@ -2,203 +2,291 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>MUSE — The Manifesto</title>
+  <title>CANVAS — Philosophy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Oswald:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 
   <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    window.nsOpenBooking = window.nsOpenBooking || function(payload = {}) {
+      if (window.NetStudio && typeof window.NetStudio.open === "function") return window.NetStudio.open(payload);
+      if (typeof window.openBooking === "function") return window.openBooking(payload);
+      console.warn("Booking engine loading...");
+    };
+  </script>
+
   <style>
     /* --- CORE VARIABLES --- */
     :root {
-      --bg: #ffffff;
-      --text: #000000;
-      --accent: #2563eb;
-      --border: #000000;
-      --font-display: 'Oswald', sans-serif;
+      --bg-body: #ffffff;
+      --text-main: #111111;
+      --accent: #3b82f6; /* Cobalt Blue */
+      --surface: #f3f4f6;
+      --border: #111111;
+      --font-display: 'Space Grotesk', sans-serif;
       --font-body: 'Inter', sans-serif;
+      --radius: 16px; 
     }
 
     /* --- RESET --- */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: var(--bg); color: var(--text);
-      font-family: var(--font-body); line-height: 1.5;
+      background: var(--bg-body); color: var(--text-main);
+      font-family: var(--font-body); line-height: 1.6;
       overflow-x: hidden;
     }
 
     /* --- TYPOGRAPHY --- */
-    h1, h2, h3 { font-family: var(--font-display); text-transform: uppercase; line-height: 0.9; }
-    h1 { font-size: clamp(80px, 15vw, 200px); font-weight: 700; letter-spacing: -0.04em; margin-bottom: 40px; }
-    h2 { font-size: clamp(40px, 6vw, 80px); font-weight: 500; }
+    h1, h2, h3 { font-family: var(--font-display); line-height: 1.1; letter-spacing: -0.03em; }
+    h1 { font-size: clamp(40px, 8vw, 80px); font-weight: 700; margin-bottom: 24px; }
+    h2 { font-size: 32px; font-weight: 700; margin-bottom: 16px; }
     
     .label {
-      font-size: 11px; font-weight: 700; text-transform: uppercase; 
-      letter-spacing: 0.1em; border: 1px solid var(--text); 
-      padding: 6px 12px; display: inline-block; margin-bottom: 24px;
+      font-family: var(--font-display); font-weight: 700; font-size: 14px; 
+      text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent);
+      display: inline-block; border: 2px solid var(--accent); padding: 8px 16px;
+      border-radius: 50px; margin-bottom: 24px; background: white;
     }
-    
-    .lead { font-size: clamp(18px, 2vw, 24px); line-height: 1.4; font-weight: 400; max-width: 800px; }
 
     /* --- UTILITIES --- */
-    .container { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
-    .section-pad { padding: 120px 0; border-bottom: 1px solid var(--border); }
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+    .section-pad { padding: 80px 0; }
     
     .btn {
-      display: inline-flex; background: var(--text); color: var(--bg);
-      padding: 16px 32px; font-family: var(--font-body); font-weight: 600; 
-      text-transform: uppercase; font-size: 12px; letter-spacing: 0.05em; 
-      text-decoration: none; transition: 0.3s;
+      display: inline-block; background: var(--accent); color: white;
+      padding: 12px 24px; border-radius: 12px; font-family: var(--font-display);
+      font-weight: 700; font-size: 16px; text-decoration: none;
+      transition: 0.2s; border: 2px solid var(--accent);
+      box-shadow: 4px 4px 0px var(--text-main); cursor: pointer;
     }
-    .btn:hover { background: var(--accent); color: white; }
+    .btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px var(--text-main); }
 
     /* --- NAVIGATION --- */
     nav {
-      position: fixed; top: 0; width: 100%; z-index: 100;
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 24px; mix-blend-mode: difference; color: white;
+      padding: 24px; display: flex; justify-content: space-between; align-items: center;
+      position: sticky; top: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); z-index: 50;
+      border-bottom: 2px solid var(--text-main);
     }
-    .logo { font-family: var(--font-display); font-size: 32px; font-weight: 700; letter-spacing: -0.05em; }
+    .logo { 
+      font-family: var(--font-display); font-size: 28px; font-weight: 700; 
+      letter-spacing: -0.05em; display: flex; align-items: center; gap: 8px;
+    }
+    .color-dot { width: 12px; height: 12px; background: var(--accent); border-radius: 50%; border: 2px solid var(--text-main); }
     .nav-links { display: flex; gap: 32px; }
-    .nav-links a { color: white; text-decoration: none; font-size: 14px; text-transform: uppercase; font-weight: 600; }
+    .nav-links a { color: var(--text-main); text-decoration: none; font-weight: 600; font-family: var(--font-display); }
     @media(max-width: 768px) { .nav-links { display: none; } }
 
     /* --- HERO --- */
-    .manifesto-hero {
-      padding: 160px 24px 80px; border-bottom: 1px solid var(--border);
+    .about-hero {
+      padding: 80px 0; border-bottom: 2px solid var(--text-main);
     }
+    .hero-lead { font-size: 20px; max-width: 700px; color: #444; }
 
-    /* --- IMAGE BREAK --- */
-    .img-break {
-      width: 100%; height: 60vh; object-fit: cover; 
-      border-bottom: 1px solid var(--border); filter: grayscale(100%);
+    /* --- VALUES GRID --- */
+    .values-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 80px;
     }
+    @media(max-width: 768px) { .values-grid { grid-template-columns: 1fr; gap: 30px; } }
 
-    /* --- ROSTER (The Artist List) --- */
-    .roster-list { display: flex; flex-direction: column; }
-    .roster-item {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 40px 24px; border-bottom: 1px solid var(--border);
-      transition: 0.3s; cursor: pointer; position: relative; overflow: hidden;
+    .value-card {
+      background: var(--surface); padding: 40px; border-radius: var(--radius);
+      border: 2px solid var(--text-main); position: relative;
     }
-    .roster-item:hover { background: var(--text); color: var(--bg); }
     
-    .artist-name { font-family: var(--font-display); font-size: 60px; text-transform: uppercase; z-index: 2; }
-    .artist-role { font-family: var(--font-body); font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; z-index: 2; }
-    
-    @media(max-width: 768px) {
-      .artist-name { font-size: 32px; }
-      .roster-item { padding: 24px; }
+    .value-icon {
+      width: 50px; height: 50px; background: white; border: 2px solid var(--text-main);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px; color: var(--accent);
     }
 
-    /* --- MARQUEE --- */
-    .marquee-wrap {
-      background: var(--text); color: var(--bg); padding: 20px 0; overflow: hidden; white-space: nowrap;
+    /* --- MANIFESTO SECTION --- */
+    .manifesto-box {
+      margin-top: 80px; background: #111; color: white; padding: 60px;
+      border-radius: 20px; text-align: center;
     }
-    .marquee-content {
-      display: inline-block; animation: scroll 15s linear infinite;
-      font-family: var(--font-display); font-size: 80px; text-transform: uppercase; line-height: 1;
-    }
-    @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    @media(max-width: 768px) { .manifesto-box { padding: 40px 24px; } }
 
     /* --- FOOTER --- */
-    footer { padding: 80px 24px; background: var(--text); color: var(--bg); text-align: center; }
-    .footer-links { display: flex; justify-content: center; gap: 24px; margin-bottom: 40px; }
-    .footer-links a { color: var(--bg); text-decoration: none; text-transform: uppercase; font-size: 12px; }
+    footer { padding: 60px 24px; text-align: center; background: #111; color: white; margin-top: 80px; }
 
   </style>
 </head>
 <body>
 
   <nav>
-    <div class="logo">MUSE.</div>
+    <div class="logo" id="nav_logo">
+      <div class="color-dot"></div>
+      CANVAS.
+    </div>
     <div class="nav-links">
       <a href="index.html">Home</a>
-      <a href="about.html" class="active">Manifesto</a>
-      <a href="services.html">Menu</a>
-      <a href="contact.html">Contact</a>
+      <a href="about.html" class="active" style="text-decoration:underline; text-decoration-color:var(--accent); text-underline-offset:4px;">Philosophy</a>
+      <a href="services.html">Services</a>
+      <a href="team.html">Artists</a>
     </div>
-    <div style="font-weight: 600; text-transform: uppercase; font-size: 14px;">Book Now</div>
+    <a href="#book" class="btn" style="padding: 10px 24px; font-size: 16px;" onclick="window.nsOpenBooking(); return false;">Book Now</a>
   </nav>
 
-  <header class="manifesto-hero">
-    <div class="label">The Philosophy</div>
-    <h1>Anti-Normal.</h1>
-    <p class="lead">
-      Muse wasn't built to maintain the status quo. We exist to disrupt it. 
-      We are an experimental studio where hair is treated as a medium of expression, 
-      not just an accessory.
+  <header class="container about-hero">
+    <div class="label">Our Mission</div>
+    <h1>The Future of<br>Hair is Fluid.</h1>
+    <p class="hero-lead" id="bio_text">
+      We started Canvas because we were tired of the binary. 
+      We believe that a haircut shouldn't be defined by who sits in the chair, 
+      but by the hair on their head.
     </p>
   </header>
 
-  <img src="https://images.unsplash.com/photo-1520338661084-680395057c93?auto=format&fit=crop&q=80&w=1600" class="img-break">
-
-  <section class="container section-pad">
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px;">
-      <div>
-        <h2>The Studio</h2>
-      </div>
-      <div>
-        <p style="font-size: 18px; margin-bottom: 30px;">
-          Located in the gritty heart of the Arts District, our space is an industrial 
-          blank canvas. Concrete floors, exposed ducts, and high-flash photography lighting.
-        </p>
-        <p style="font-size: 18px; margin-bottom: 40px;">
-          We stripped away the "salon" fluff. No cucumber water. No gossip magazines. 
-          Just raw creativity and the best sound system in the city.
-        </p>
-        <a href="#book" class="btn">Book The Space</a>
-      </div>
-    </div>
-  </section>
-
-  <div class="marquee-wrap">
-    <div class="marquee-content">
-      NO BAD HAIR DAYS • DEFINE YOUR ERA • MUSE STUDIO • NO BAD HAIR DAYS • DEFINE YOUR ERA • MUSE STUDIO •
-    </div>
-  </div>
-
-  <section>
-    <div class="container" style="padding-top: 100px; padding-bottom: 40px;">
-      <div class="label">The Talent</div>
-      <h2 style="margin-bottom: 40px;">Roster</h2>
-    </div>
+  <main class="container">
     
-    <div class="roster-list">
-      <div class="roster-item">
-        <span class="artist-name">Jinx</span>
-        <span class="artist-role">Creative Director</span>
+    <div class="values-grid">
+      
+      <div class="value-card">
+        <div class="value-icon"><i data-lucide="clock"></i></div>
+        <h3>Hourly Pricing</h3>
+        <p>
+          Historically, women have paid more for "short cuts" than men. We removed gender from the equation.
+          You pay for the time you book. 45 minutes costs the same for everyone.
+        </p>
       </div>
-      <div class="roster-item">
-        <span class="artist-name">Kairo</span>
-        <span class="artist-role">Color Specialist</span>
+
+      <div class="value-card">
+        <div class="value-icon"><i data-lucide="heart-handshake"></i></div>
+        <h3>Gratuity Free</h3>
+        <p>
+          Tipping culture is confusing and rooted in inequality. We pay our staff a professional, 
+          livable wage so they don't rely on tips. The price on the menu is the final price.
+        </p>
       </div>
-      <div class="roster-item">
-        <span class="artist-name">Sasha</span>
-        <span class="artist-role">Extensions / Editorial</span>
+
+      <div class="value-card">
+        <div class="value-icon"><i data-lucide="smile"></i></div>
+        <h3>Sensory Friendly</h3>
+        <p>
+          Salons can be loud and overwhelming. We offer "Silent Appointments" and use 
+          fragrance-free products upon request to ensure everyone feels comfortable.
+        </p>
       </div>
-      <div class="roster-item">
-        <span class="artist-name">Nico</span>
-        <span class="artist-role">Senior Stylist</span>
+
+      <div class="value-card">
+        <div class="value-icon"><i data-lucide="recycle"></i></div>
+        <h3>Eco-Conscious</h3>
+        <p>
+          We are a Green Circle certified salon. We recycle 95% of our waste, including 
+          hair clippings, foils, and color tubes.
+        </p>
       </div>
+
     </div>
-  </section>
+
+    <div class="manifesto-box">
+      <h2 style="font-family: var(--font-display); font-size: 36px; margin-bottom: 20px;">
+        "Come As You Are."
+      </h2>
+      <p style="font-size: 18px; max-width: 600px; margin: 0 auto 40px; opacity: 0.8;">
+        Canvas is more than a salon. It is a community space. Whether you are transitioning, 
+        maintaining, or transforming, you are safe here.
+      </p>
+      <button class="btn" style="background: white; color: black; border-color: white;" onclick="window.nsOpenBooking()">
+        Book An Appointment
+      </button>
+    </div>
+
+  </main>
 
   <footer>
-    <h2 style="margin-bottom: 40px;">MUSE.</h2>
-    <div class="footer-links">
-      <a href="#">Instagram</a>
-      <a href="#">TikTok</a>
-      <a href="#">Contact</a>
-    </div>
-    <div style="font-size: 12px; color: #888;">© 2026 Muse Studio. Powered by Net Studio.</div>
+    <div id="footer_logo" style="font-family: var(--font-display); font-size: 32px; font-weight: 700; margin-bottom: 20px;">CANVAS.</div>
+    <p style="color: #888; font-size: 14px;">© 2026 Canvas Studio. A Safe Space for All.</p>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
   <script>
-    lucide.createIcons();
-    // Hover effects logic would go here
+    if (window.lucide) lucide.createIcons();
+
+    /* --- UTILS --- */
+    function nsGetSlug() {
+      const q = new URLSearchParams(location.search).get("b");
+      if (q) return q.toLowerCase();
+      const h = location.hostname.toLowerCase();
+      const R = "netstudiodevelopment.com";
+      if (!h || h === "localhost" || h.startsWith("127.") || h === R || h === "www." + R) return null;
+      if (h.endsWith("." + R)) return h.slice(0, -(R.length + 1)).split(".")[0];
+      return null;
+    }
+
+    // ✅ PATCH 2: Context Helper
+    function nsSetBusinessContext(businessId) {
+      if (!businessId) return;
+      window.NS_BUSINESS_ID = businessId;
+      document.documentElement.setAttribute("data-business-id", businessId);
+      if (document.body) document.body.setAttribute("data-business-id", businessId);
+      try {
+        localStorage.setItem("ns_business_id", businessId);
+        sessionStorage.setItem("ns_business_id", businessId);
+      } catch(e) {}
+      try {
+        const u = new URL(location.href);
+        if (!u.searchParams.get("business_id")) {
+          u.searchParams.set("business_id", businessId);
+          history.replaceState({}, "", u.toString());
+        }
+      } catch(e) {}
+    }
+
+    // ✅ PATCH 3: Dynamic Script Loader
+    function nsLoadBookingEngine() {
+      return new Promise((resolve) => {
+        if (window.openBooking || (window.NetStudio && typeof window.NetStudio.open === "function")) return resolve(true);
+        const s = document.createElement("script");
+        s.src = "/netstudio_booking.js";
+        s.async = true;
+        s.onload = () => resolve(true);
+        s.onerror = () => resolve(false);
+        document.body.appendChild(s);
+      });
+    }
+
+    /* --- MAIN LOAD --- */
+    const SB_URL = "https://jdvdgvolfmvlgyfklbwe.supabase.co";
+    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkdmRndm9sZm12bGd5ZmtsYndlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1Mjk5MDgsImV4cCI6MjA3OTEwNTkwOH0.xiAOgWof9En3jbCpY1vrYpj3HD-O6jMHbamIHTSflek";
+    const sb = supabase.createClient(SB_URL, SB_KEY);
+    const SLUG = nsGetSlug();
+
+    async function loadCanvasAbout() {
+      if (!SLUG) return;
+
+      // 1. Business Info
+      const { data: biz } = await sb.from("business")
+        .select("id, name, bio")
+        .eq("slug", SLUG).maybeSingle();
+      
+      if (!biz) return;
+
+      // ✅ PATCH 4: Context & Engine
+      nsSetBusinessContext(biz.id);
+      await nsLoadBookingEngine();
+
+      // Branding
+      if (biz.name) {
+        const n = biz.name.toUpperCase() + ".";
+        const navL = document.getElementById("nav_logo");
+        const footL = document.getElementById("footer_logo");
+        if(navL) navL.innerHTML = `<div class="color-dot"></div> ${n}`;
+        if(footL) footL.textContent = n;
+      }
+
+      // Dynamic Bio Injection (if available)
+      if (biz.bio && document.getElementById("bio_text")) {
+        document.getElementById("bio_text").textContent = biz.bio;
+      }
+    }
+
+    loadCanvasAbout();
   </script>
 </body>
 </html>
