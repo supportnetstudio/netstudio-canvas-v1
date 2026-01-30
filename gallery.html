@@ -281,6 +281,10 @@
       
       if (!biz) return;
 
+      // ✅ PATCH: Inject Business ID for Booking Engine
+      window.NS_BUSINESS_ID = biz.id;
+      document.documentElement.setAttribute("data-business-id", biz.id);
+
       // BRANDING
       if (biz.name) {
         const name = biz.name.toUpperCase() + ".";
