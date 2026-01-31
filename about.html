@@ -132,9 +132,9 @@
   </nav>
 
   <header class="container about-hero">
-    <div class="label">Our Mission</div>
-    <h1>The Future of<br>Hair is Fluid.</h1>
-    <p class="hero-lead" id="bio_text">
+    <div class="label" id="about_label">Our Mission</div>
+    <h1 id="about_h1">The Future of<br>Hair is Fluid.</h1>
+    <p class="hero-lead" id="about_lead">
       We started Canvas because we were tired of the binary. 
       We believe that a haircut shouldn't be defined by who sits in the chair, 
       but by the hair on their head.
@@ -147,8 +147,8 @@
       
       <div class="value-card">
         <div class="value-icon"><i data-lucide="clock"></i></div>
-        <h3>Hourly Pricing</h3>
-        <p>
+        <h3 id="value1_title">Hourly Pricing</h3>
+        <p id="value1_text">
           Historically, women have paid more for "short cuts" than men. We removed gender from the equation.
           You pay for the time you book. 45 minutes costs the same for everyone.
         </p>
@@ -156,8 +156,8 @@
 
       <div class="value-card">
         <div class="value-icon"><i data-lucide="heart-handshake"></i></div>
-        <h3>Gratuity Free</h3>
-        <p>
+        <h3 id="value2_title">Gratuity Free</h3>
+        <p id="value2_text">
           Tipping culture is confusing and rooted in inequality. We pay our staff a professional, 
           livable wage so they don't rely on tips. The price on the menu is the final price.
         </p>
@@ -165,8 +165,8 @@
 
       <div class="value-card">
         <div class="value-icon"><i data-lucide="smile"></i></div>
-        <h3>Sensory Friendly</h3>
-        <p>
+        <h3 id="value3_title">Sensory Friendly</h3>
+        <p id="value3_text">
           Salons can be loud and overwhelming. We offer "Silent Appointments" and use 
           fragrance-free products upon request to ensure everyone feels comfortable.
         </p>
@@ -174,8 +174,8 @@
 
       <div class="value-card">
         <div class="value-icon"><i data-lucide="recycle"></i></div>
-        <h3>Eco-Conscious</h3>
-        <p>
+        <h3 id="value4_title">Eco-Conscious</h3>
+        <p id="value4_text">
           We are a Green Circle certified salon. We recycle 95% of our waste, including 
           hair clippings, foils, and color tubes.
         </p>
@@ -184,14 +184,14 @@
     </div>
 
     <div class="manifesto-box">
-      <h2 style="font-family: var(--font-display); font-size: 36px; margin-bottom: 20px;">
+      <h2 id="manifesto_quote" style="font-family: var(--font-display); font-size: 36px; margin-bottom: 20px;">
         "Come As You Are."
       </h2>
-      <p style="font-size: 18px; max-width: 600px; margin: 0 auto 40px; opacity: 0.8;">
+      <p id="manifesto_text" style="font-size: 18px; max-width: 600px; margin: 0 auto 40px; opacity: 0.8;">
         Canvas is more than a salon. It is a community space. Whether you are transitioning, 
         maintaining, or transforming, you are safe here.
       </p>
-      <button class="btn" style="background: white; color: black; border-color: white;" onclick="window.nsOpenBooking()">
+      <button id="manifesto_btn" class="btn" style="background: white; color: black; border-color: white;" onclick="window.nsOpenBooking()">
         Book An Appointment
       </button>
     </div>
@@ -219,7 +219,6 @@
       return null;
     }
 
-    // ✅ PATCH 2: Context Helper
     function nsSetBusinessContext(businessId) {
       if (!businessId) return;
       window.NS_BUSINESS_ID = businessId;
@@ -229,16 +228,8 @@
         localStorage.setItem("ns_business_id", businessId);
         sessionStorage.setItem("ns_business_id", businessId);
       } catch(e) {}
-      try {
-        const u = new URL(location.href);
-        if (!u.searchParams.get("business_id")) {
-          u.searchParams.set("business_id", businessId);
-          history.replaceState({}, "", u.toString());
-        }
-      } catch(e) {}
     }
 
-    // ✅ PATCH 3: Dynamic Script Loader
     function nsLoadBookingEngine() {
       return new Promise((resolve) => {
         if (window.openBooking || (window.NetStudio && typeof window.NetStudio.open === "function")) return resolve(true);
@@ -251,23 +242,75 @@
       });
     }
 
-    /* --- MAIN LOAD --- */
+    function pick(...vals){
+      for (const v of vals) {
+        if (v !== undefined && v !== null && String(v).trim() !== "") return String(v);
+      }
+      return "";
+    }
+    function setText(id, text){
+      const el = document.getElementById(id);
+      if (el) el.textContent = text;
+    }
+    function setHTML(id, html){
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = html;
+    }
+
+    /* --- CONTENT INJECTOR --- */
+    function applyCanvasAboutFromContent(content){
+      const c = content || {};
+      const about = c.about || {};
+      const hero = about.hero || {};
+      const values = about.values || [];
+      const manifesto = about.manifesto || {};
+
+      // HERO
+      setText("about_label", pick(hero.kicker, "Our Mission"));
+      setHTML("about_h1", pick(hero.heading, "The Future of<br>Hair is Fluid."));
+      setText("about_lead", pick(hero.text, ""));
+
+      // VALUES (canonical array)
+      const v1 = values[0] || {};
+      const v2 = values[1] || {};
+      const v3 = values[2] || {};
+      const v4 = values[3] || {};
+
+      setText("value1_title", pick(v1.title, "Hourly Pricing"));
+      setText("value1_text",  pick(v1.text,  ""));
+      setText("value2_title", pick(v2.title, "Gratuity Free"));
+      setText("value2_text",  pick(v2.text,  ""));
+      setText("value3_title", pick(v3.title, "Sensory Friendly"));
+      setText("value3_text",  pick(v3.text,  ""));
+      setText("value4_title", pick(v4.title, "Eco-Conscious"));
+      setText("value4_text",  pick(v4.text,  ""));
+
+      // MANIFESTO BOX
+      setText("manifesto_quote", pick(manifesto.quote, `"Come As You Are."`));
+      setText("manifesto_text", pick(manifesto.text, ""));
+      setText("manifesto_btn", pick(manifesto.button_label, "Book An Appointment"));
+    }
+
+    /* --- DATA LOAD --- */
     const SB_URL = "https://jdvdgvolfmvlgyfklbwe.supabase.co";
     const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkdmRndm9sZm12bGd5ZmtsYndlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1Mjk5MDgsImV4cCI6MjA3OTEwNTkwOH0.xiAOgWof9En3jbCpY1vrYpj3HD-O6jMHbamIHTSflek";
     const sb = supabase.createClient(SB_URL, SB_KEY);
-    const SLUG = nsGetSlug();
 
     async function loadCanvasAbout() {
+      const SLUG = nsGetSlug();
       if (!SLUG) return;
 
-      // 1. Business Info
-      const { data: biz } = await sb.from("business")
-        .select("id, name, bio")
-        .eq("slug", SLUG).maybeSingle();
-      
+      // 1) Business
+      const { data: biz, error: bizErr } = await sb
+        .from("business")
+        .select("id, name, slug")
+        .eq("slug", SLUG)
+        .maybeSingle();
+
+      if (bizErr) console.error(bizErr);
       if (!biz) return;
 
-      // ✅ PATCH 4: Context & Engine
+      // Context + booking engine
       nsSetBusinessContext(biz.id);
       await nsLoadBookingEngine();
 
@@ -280,9 +323,30 @@
         if(footL) footL.textContent = n;
       }
 
-      // Dynamic Bio Injection (if available)
-      if (biz.bio && document.getElementById("bio_text")) {
-        document.getElementById("bio_text").textContent = biz.bio;
+      // 2) Follow pointer (business_sites_one)
+      let activeKey = "canvas_v1";
+      const { data: one, error: oneErr } = await sb
+        .from("business_sites_one")
+        .select("active_template_key")
+        .eq("business_id", biz.id)
+        .maybeSingle();
+
+      if (oneErr) console.error(oneErr);
+      if (one?.active_template_key) activeKey = one.active_template_key.trim();
+
+      // 3) Fetch site row for active template
+      const { data: site, error: siteErr } = await sb
+        .from("business_sites")
+        .select("template_key, content_json")
+        .eq("business_id", biz.id)
+        .eq("template_key", activeKey)
+        .maybeSingle();
+
+      if (siteErr) console.error(siteErr);
+
+      // 4) Only apply if canvas_v1 is the active template
+      if (site?.template_key === "canvas_v1") {
+        applyCanvasAboutFromContent(site.content_json || {});
       }
     }
 
