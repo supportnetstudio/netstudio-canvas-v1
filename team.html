@@ -130,9 +130,9 @@
   </nav>
 
   <header class="team-hero container">
-    <div class="label">The Roster</div>
-    <h1>Meet The Collective.</h1>
-    <p style="font-size: 18px; max-width: 600px; margin: 0 auto; color: #555;">
+    <div class="label" id="team_hero_label">The Roster</div>
+    <h1 id="team_hero_heading">Meet The Collective.</h1>
+    <p id="team_hero_text" style="font-size: 18px; max-width: 600px; margin: 0 auto; color: #555;">
       We are a team of independent artists united by a shared philosophy: 
       Respect the hair, respect the human.
     </p>
@@ -147,7 +147,7 @@
   <footer>
     <div id="ns_footer_brand" style="font-family: var(--font-display); font-size: 32px; font-weight: 700; margin-bottom: 14px;">CANVAS.</div>
     <p id="ns_footer_address" style="color:#bbb;font-size:14px;margin-bottom:10px;"></p>
-    <p style="color: #888; font-size: 14px;">© 2026 Canvas Studio. A Safe Space for All.</p>
+    <p id="footer_copy" style="color: #888; font-size: 14px;">© 2026 Canvas Studio. A Safe Space for All.</p>
   </footer>
 
   <script src="/netstudio_booking.js"></script>
@@ -199,6 +199,52 @@
     const sb = supabase.createClient(SB_URL, SB_KEY);
 
     const BUSINESS_SLUG = nsGetSlugFromHost();
+    const TEMPLATE_KEY = "canvas_v1";
+
+    async function nsLoadCanvasContent(businessId) {
+      const { data: site, error } = await sb
+        .schema("public")
+        .from("business_sites")
+        .select("content_json")
+        .eq("business_id", businessId)
+        .eq("template_key", TEMPLATE_KEY)
+        .maybeSingle();
+
+      if (error) console.warn("content_json load error:", error);
+      return site?.content_json || {};
+    }
+
+    function nsApplyCanvasContent(content) {
+      const team = content?.team || {};
+      const hero = team?.hero || {};
+      const join = team?.join_card || {};
+      const footer = content?.footer || {};
+
+      // HERO
+      const elLabel = document.getElementById("team_hero_label");
+      const elHeading = document.getElementById("team_hero_heading");
+      const elText = document.getElementById("team_hero_text");
+
+      if (elLabel) elLabel.textContent = String(hero.label ?? "The Roster");
+      if (elHeading) elHeading.textContent = String(hero.heading ?? "Meet The Collective.");
+      if (elText) elText.textContent = String(hero.text ?? "We are a team of independent artists united by a shared philosophy: Respect the hair, respect the human.");
+
+      // FOOTER COPYRIGHT
+      const elCopy = document.getElementById("footer_copy");
+      if (elCopy) elCopy.textContent = String(
+        footer.copyright ?? "© 2026 Canvas Studio. A Safe Space for All."
+      );
+
+      // JOIN CARD CONFIG (store globally so renderTeam can use it)
+      window.__NS_CANVAS_JOIN__ = {
+        enabled: join.enabled !== false,
+        emoji: String(join.emoji ?? "👋"),
+        heading: String(join.heading ?? "Join Us"),
+        text: String(join.text ?? "Are you an independent artist looking for a home?"),
+        button_label: String(join.button_label ?? "Apply Now"),
+        button_href: String(join.button_href ?? "contact.html")
+      };
+    }
 
     async function nsApplyBrand() {
       if (!BUSINESS_SLUG) return null;
@@ -244,7 +290,7 @@
             No active artists found.
           </div>
         `;
-        return;
+        // Even if no artists, we might want to show the Join card, see below
       }
 
       const fallbackImg =
@@ -272,22 +318,33 @@
         `);
       });
 
-      // Add "Join Us" card at end
-      grid.insertAdjacentHTML("beforeend", `
-        <div class="artist-card" style="background: var(--text-main); color: white; display:flex; flex-direction: column; justify-content: center;">
-          <div style="font-size: 48px; margin-bottom: 20px;">👋</div>
-          <div class="artist-name" style="color: white;">Join Us</div>
-          <p style="font-size: 14px; margin-bottom: 24px; color: #ccc;">Are you an independent artist looking for a home?</p>
-          <button class="btn" style="width:100%; font-size: 14px; background: white; color: black; border-color: white;" onclick="window.location.href='contact.html'">Apply Now</button>
-        </div>
-      `);
+      // Join card (from content_json; default on)
+      const jc = window.__NS_CANVAS_JOIN__ || { enabled: true };
+      if (jc.enabled !== false) {
+        grid.insertAdjacentHTML("beforeend", `
+          <div class="artist-card" style="background: var(--text-main); color: white; display:flex; flex-direction: column; justify-content: center;">
+            <div style="font-size: 48px; margin-bottom: 20px;">${escapeHtml(jc.emoji || "👋")}</div>
+            <div class="artist-name" style="color: white;">${escapeHtml(jc.heading || "Join Us")}</div>
+            <p style="font-size: 14px; margin-bottom: 24px; color: #ccc;">${escapeHtml(jc.text || "")}</p>
+            <button class="btn"
+              style="width:100%; font-size: 14px; background: white; color: black; border-color: white;"
+              onclick="window.location.href='${escapeHtml(jc.button_href || "contact.html")}'">
+              ${escapeHtml(jc.button_label || "Apply Now")}
+            </button>
+          </div>
+        `);
+      }
     }
 
     async function nsWireCardsToTeamMembers() {
       const biz = await nsApplyBrand();
       if (!biz?.id) return;
 
-      // ✅ RULE: active + logged-in only
+      // 1) Load + apply content_json (hero/footer/join card)
+      const content = await nsLoadCanvasContent(biz.id);
+      nsApplyCanvasContent(content);
+
+      // 2) Team members (cards)
       const { data: members, error } = await sb
         .schema("public")
         .from("team_members")
