@@ -120,11 +120,19 @@
       const sb = supabase.createClient(NS.SB_URL, NS.SB_KEY);
       window.__GALLERY_DATA__ = [];
       window.__TEAM_MAP__ = new Map();
+      
+      // Global configuration holder to be populated by apply()
+      window.__GALLERY_CONFIG__ = {};
 
       function renderGrid(filterId = "all") {
         const grid = $("gallery_grid");
         const list = filterId === "all" ? window.__GALLERY_DATA__ : window.__GALLERY_DATA__.filter(i => i.team_member_id === filterId);
         
+        // Pull UI text from config or fallbacks
+        const ui = window.__GALLERY_CONFIG__.ui || {};
+        const emptyText = ui.empty_state || "No visuals found.";
+        const bookLabel = ui.book_link_label || "Book This Look";
+
         grid.innerHTML = list.length ? list.map(i => {
           const artistName = window.__TEAM_MAP__.get(i.team_member_id);
           const tag = artistName ? `By ${artistName.split(' ')[0]}` : (i.caption || "Look");
@@ -133,31 +141,46 @@
               <div class="img-wrap"><img src="${i.image_url}" class="gallery-img"></div>
               <div class="item-meta">
                 <span class="item-tag">${tag}</span>
-                <a href="#book" class="book-link" onclick="nsOpenBooking({ staff_id: '${i.team_member_id || ''}' }); return false;">Book This Look</a>
+                <a href="#book" class="book-link" onclick="nsOpenBooking({ staff_id: '${i.team_member_id || ''}' }); return false;">${bookLabel}</a>
               </div>
             </div>`;
-        }).join("") : `<p style="text-align:center; padding:40px; color:#999; grid-column: 1/-1;">No visuals found.</p>`;
+        }).join("") : `<p style="text-align:center; padding:40px; color:#999; grid-column: 1/-1;">${emptyText}</p>`;
       }
 
       function apply(data, biz, images) {
+        // --- 1. PATCH & CONFIGURATION ---
         const g = data.gallery || {};
+        window.__GALLERY_CONFIG__ = g; // Store for renderGrid usage
+
         const bName = biz.name || "CANVAS";
         if($("nav_logo")) $("nav_logo").innerHTML = `<div class="color-dot"></div> ${bName.toUpperCase()}.`;
         if($("footer_logo")) $("footer_logo").textContent = bName.toUpperCase() + ".";
-        if($("footer_copy")) $("footer_copy").textContent = `© ${new Date().getFullYear()} ${bName}. A Safe Space for All.`;
+        
+        // Footer Copy: JSON overrides default logic
+        const footerText = (g.footer && g.footer.copyright) 
+          ? g.footer.copyright 
+          : `© ${new Date().getFullYear()} ${bName}. A Safe Space for All.`;
+        if($("footer_copy")) $("footer_copy").textContent = footerText;
 
+        // Hero Content
         if($("gallery_kicker")) $("gallery_kicker").textContent = pick(g.kicker, "The Lookbook");
         if($("gallery_heading")) $("gallery_heading").innerHTML = pick(g.heading, "Real Hair.<br>Real Humans.");
 
+        // Address
         const addr = [biz.street_address, biz.city, biz.state].filter(Boolean).join(", ");
         if($("ns_address")) $("ns_address").textContent = addr;
 
+        // --- 2. DATA PREP ---
         const teamArray = Array.isArray(biz.team_json) ? biz.team_json : [];
         window.__TEAM_MAP__ = new Map(teamArray.map(m => [m.id || m.uuid, m.name || m.display_name]));
         window.__GALLERY_DATA__ = images;
 
+        // --- 3. FILTER BAR ---
         const filterBar = $("team_filter");
-        filterBar.innerHTML = `<button class="btn-outline active" data-id="all">ALL LOOKS</button>` + 
+        const filterConfig = g.filter || {};
+        const allLabel = (filterConfig.all_label || "ALL LOOKS").toUpperCase();
+
+        filterBar.innerHTML = `<button class="btn-outline active" data-id="all">${allLabel}</button>` + 
           teamArray.map(m => `<button class="btn-outline" data-id="${m.id || m.uuid}">${(m.name || m.display_name).toUpperCase()}</button>`).join("");
 
         filterBar.querySelectorAll(".btn-outline").forEach(btn => {
@@ -168,6 +191,7 @@
           };
         });
 
+        // --- 4. RENDER ---
         renderGrid("all");
         $("main-content").style.opacity = "1";
       }
