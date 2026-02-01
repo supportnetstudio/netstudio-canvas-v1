@@ -121,17 +121,17 @@
       window.__GALLERY_DATA__ = [];
       window.__TEAM_MAP__ = new Map();
       
-      // Global configuration holder to be populated by apply()
+      // Global configuration holder
       window.__GALLERY_CONFIG__ = {};
 
       function renderGrid(filterId = "all") {
         const grid = $("gallery_grid");
         const list = filterId === "all" ? window.__GALLERY_DATA__ : window.__GALLERY_DATA__.filter(i => i.team_member_id === filterId);
         
-        // Pull UI text from config or fallbacks
+        // [PATCH 3] UI labels: Fixed to use 'book_button_label' schema
         const ui = window.__GALLERY_CONFIG__.ui || {};
         const emptyText = ui.empty_state || "No visuals found.";
-        const bookLabel = ui.book_link_label || "Book This Look";
+        const bookLabel = ui.book_button_label || "Book This Look";
 
         grid.innerHTML = list.length ? list.map(i => {
           const artistName = window.__TEAM_MAP__.get(i.team_member_id);
@@ -148,35 +148,37 @@
       }
 
       function apply(data, biz, images) {
-        // --- 1. PATCH & CONFIGURATION ---
+        // --- 1. CONFIG & HERO ---
         const g = data.gallery || {};
-        window.__GALLERY_CONFIG__ = g; // Store for renderGrid usage
+        window.__GALLERY_CONFIG__ = g; 
 
+        // [PATCH 1] Hero: Fixed to use 'hero' nested object
+        const hero = g.hero || {}; 
+        if($("gallery_kicker")) $("gallery_kicker").textContent = pick(hero.label, "The Lookbook");
+        if($("gallery_heading")) $("gallery_heading").innerHTML = pick(hero.title, "Real Hair.<br>Real Humans.");
+
+        // --- 2. GLOBAL & FOOTER ---
         const bName = biz.name || "CANVAS";
         if($("nav_logo")) $("nav_logo").innerHTML = `<div class="color-dot"></div> ${bName.toUpperCase()}.`;
         if($("footer_logo")) $("footer_logo").textContent = bName.toUpperCase() + ".";
         
-        // Footer Copy: JSON overrides default logic
+        // Footer (Already correct, but ensuring safety)
         const footerText = (g.footer && g.footer.copyright) 
           ? g.footer.copyright 
           : `© ${new Date().getFullYear()} ${bName}. A Safe Space for All.`;
         if($("footer_copy")) $("footer_copy").textContent = footerText;
 
-        // Hero Content
-        if($("gallery_kicker")) $("gallery_kicker").textContent = pick(g.kicker, "The Lookbook");
-        if($("gallery_heading")) $("gallery_heading").innerHTML = pick(g.heading, "Real Hair.<br>Real Humans.");
-
-        // Address
         const addr = [biz.street_address, biz.city, biz.state].filter(Boolean).join(", ");
         if($("ns_address")) $("ns_address").textContent = addr;
 
-        // --- 2. DATA PREP ---
+        // --- 3. DATA PREP ---
         const teamArray = Array.isArray(biz.team_json) ? biz.team_json : [];
         window.__TEAM_MAP__ = new Map(teamArray.map(m => [m.id || m.uuid, m.name || m.display_name]));
         window.__GALLERY_DATA__ = images;
 
-        // --- 3. FILTER BAR ---
+        // --- 4. FILTER BAR ---
         const filterBar = $("team_filter");
+        // [PATCH 2] Filter: Confirmed 'all_label' usage
         const filterConfig = g.filter || {};
         const allLabel = (filterConfig.all_label || "ALL LOOKS").toUpperCase();
 
@@ -191,7 +193,7 @@
           };
         });
 
-        // --- 4. RENDER ---
+        // --- 5. RENDER ---
         renderGrid("all");
         $("main-content").style.opacity = "1";
       }
