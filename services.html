@@ -148,14 +148,14 @@
   </nav>
 
   <header class="container menu-header">
-    <div class="label">The Menu</div>
-    <h1>Transparent Pricing.</h1>
+    <div class="label" id="nsServicesHeroLabel">The Menu</div>
+    <h1 id="nsServicesHeroTitle">Transparent Pricing.</h1>
     
     <div class="explainer-box">
       <div class="info-icon"><i data-lucide="clock"></i></div>
       <div>
-        <h4 style="font-weight: 700; margin-bottom: 8px;">How Hourly Pricing Works</h4>
-        <p style="font-size: 15px; color: #555;">
+        <h4 id="nsServicesExplainerTitle" style="font-weight: 700; margin-bottom: 8px;">How Hourly Pricing Works</h4>
+        <p id="nsServicesExplainerText" style="font-size: 15px; color: #555;">
           We charge by the time booked, not by gender. Gratuity is already included in the price. 
           If you have extra thick hair or want a major change, please book the "Transformation" block.
         </p>
@@ -171,7 +171,7 @@
     <div id="nsFooterTitle" style="font-family: var(--font-display); font-size: 32px; font-weight: 700; margin-bottom: 20px;">
       CANVAS.
     </div>
-    <p style="color: #888; font-size: 14px;">© 2026 Canvas Studio. A Safe Space for All.</p>
+    <p id="nsServicesFooterCopyright" style="color: #888; font-size: 14px;">© 2026 Canvas Studio. A Safe Space for All.</p>
   </footer>
 
   <script>
@@ -228,6 +228,23 @@
       return data;
     }
 
+    // 3b. Load Services Content (JSON)
+    async function nsLoadServicesContent() {
+      if (!window.BUSINESS_ID) return null;
+
+      const { data, error } = await sb
+        .from("business_sites")
+        .select("content_json")
+        .eq("business_id", window.BUSINESS_ID)
+        .eq("template_key", "canvas_v1")
+        .maybeSingle();
+
+      if (error || !data) return null;
+
+      const services = data?.content_json?.services || null;
+      return services;
+    }
+
     function nsApplyBranding(biz) {
       if (!biz) return;
       const name = (biz.name || "CANVAS").trim();
@@ -242,6 +259,37 @@
       }
       if (footerEl) footerEl.textContent = `${name.toUpperCase()}.`;
     }
+
+    // 3c. Apply Services Content to DOM
+    function nsApplyServicesContent(svc) {
+      const s = svc || {};
+      const hero = s.hero || {};
+      const expl = s.explainer || {};
+      const ui = s.ui || {};
+      const foot = s.footer || {};
+
+      // hero
+      const heroLabel = document.getElementById("nsServicesHeroLabel");
+      if (heroLabel && hero.label != null) heroLabel.textContent = hero.label;
+
+      const heroTitle = document.getElementById("nsServicesHeroTitle");
+      if (heroTitle && hero.title != null) heroTitle.textContent = hero.title;
+
+      // explainer
+      const exTitle = document.getElementById("nsServicesExplainerTitle");
+      if (exTitle && expl.title != null) exTitle.textContent = expl.title;
+
+      const exText = document.getElementById("nsServicesExplainerText");
+      if (exText && expl.text != null) exText.textContent = expl.text;
+
+      // footer title (existing id already)
+      const ftTitle = document.getElementById("nsFooterTitle");
+      if (ftTitle && foot.title != null) ftTitle.textContent = foot.title;
+
+      const ftCopy = document.getElementById("nsServicesFooterCopyright");
+      if (ftCopy && foot.copyright != null) ftCopy.textContent = foot.copyright;
+    }
+
 
     // 4. Menu Logic
     async function nsLoadMenuItems() {
@@ -268,8 +316,9 @@
       const mount = document.getElementById("nsMenuMount");
       if (!mount) return;
 
+      // Use Empty State from JSON or default
       if (!items.length) {
-        mount.innerHTML = `<div style="padding:40px 0;">No services found.</div>`;
+        mount.innerHTML = `<div style="padding:40px 0;">${(window.NS?.SERVICES_CONTENT?.ui?.empty_state) || "No services found."}</div>`;
         return;
       }
 
@@ -280,6 +329,9 @@
       });
 
       mount.innerHTML = "";
+      
+      // Determine button label once
+      const btnLabel = (window.NS?.SERVICES_CONTENT?.ui?.book_button_label) || "Book";
 
       Object.entries(groups).forEach(([section, rows]) => {
         const wrap = document.createElement("div");
@@ -295,7 +347,9 @@
                 <div class="svc-desc">${r.description || ""}</div>
               </div>
               <div class="svc-price">${nsMoney(r)}</div>
-              <button type="button" class="btn" onclick="window.openBooking && window.openBooking('${r.id}')">Book</button>
+              <button type="button" class="btn" onclick="window.openBooking && window.openBooking('${r.id}')">
+                ${btnLabel}
+              </button>
             </div>
           `).join("")}
         `;
@@ -303,9 +357,8 @@
       });
     }
 
-    // 5. Dynamic Engine Loader (The Fix)
+    // 5. Dynamic Engine Loader
     function nsLoadBookingScript() {
-      // ✅ Correct Path: "./netstudio_booking.js" for Canvas flat structure
       if (document.querySelector('script[data-ns-booking="1"]')) return;
       const s = document.createElement("script");
       s.src = "./netstudio_booking.js"; 
@@ -345,10 +398,15 @@
       nsApplyBranding(biz);
       nsWireBookNow();
 
+      // Load Services Content (JSON) & Apply
+      const servicesContent = await nsLoadServicesContent();
+      window.NS.SERVICES_CONTENT = servicesContent || {};
+      nsApplyServicesContent(window.NS.SERVICES_CONTENT);
+
       const items = await nsLoadMenuItems();
       nsRenderMenu(items);
       
-      // ✅ Load Engine Last (with correct path)
+      // Load Engine Last
       nsLoadBookingScript();
     })();
   </script>
