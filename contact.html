@@ -4,13 +4,10 @@
   <meta charset="UTF-8" />
   <title>CANVAS — Contact Us</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
-
   <script src="https://unpkg.com/lucide@latest"></script>
-
   <script>
     window.nsOpenBooking = window.nsOpenBooking || function(payload = {}) {
       if (window.NetStudio && typeof window.NetStudio.open === "function") return window.NetStudio.open(payload);
@@ -20,42 +17,23 @@
   </script>
 
   <style>
-    /* --- CORE VARIABLES --- */
     :root {
-      --bg-body: #ffffff;
-      --text-main: #111111;
-      --accent: #3b82f6; /* Cobalt Blue */
-      --surface: #f3f4f6;
-      --border: #111111;
-      --font-display: 'Space Grotesk', sans-serif;
-      --font-body: 'Inter', sans-serif;
-      --radius: 16px; 
+      --bg-body: #ffffff; --text-main: #111111; --accent: #3b82f6; 
+      --surface: #f3f4f6; --border: #111111; --radius: 16px;
+      --font-display: 'Space Grotesk', sans-serif; --font-body: 'Inter', sans-serif;
     }
-
-    /* --- RESET --- */
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: var(--bg-body); color: var(--text-main);
-      font-family: var(--font-body); line-height: 1.5;
-      overflow-x: hidden;
-    }
-
-    /* --- TYPOGRAPHY --- */
+    body { background: var(--bg-body); color: var(--text-main); font-family: var(--font-body); line-height: 1.5; overflow-x: hidden; }
     h1, h2, h3 { font-family: var(--font-display); line-height: 1.1; letter-spacing: -0.03em; }
     h1 { font-size: clamp(48px, 8vw, 80px); font-weight: 700; margin-bottom: 24px; }
     h2 { font-size: 32px; font-weight: 700; margin-bottom: 16px; }
-    
     .label {
       font-family: var(--font-display); font-weight: 700; font-size: 14px; 
       text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent);
       display: inline-block; border: 2px solid var(--accent); padding: 8px 16px;
       border-radius: 50px; margin-bottom: 24px; background: white;
     }
-
-    /* --- UTILITIES --- */
     .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-    .section-pad { padding: 80px 0; }
-    
     .btn {
       display: inline-block; background: var(--accent); color: white;
       padding: 16px 32px; border-radius: 12px; font-family: var(--font-display);
@@ -64,87 +42,43 @@
       box-shadow: 4px 4px 0px var(--text-main); cursor: pointer; text-align: center;
     }
     .btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px var(--text-main); }
-    
     .btn-outline {
       background: white; color: var(--text-main); border: 2px solid var(--text-main);
       padding: 10px 24px; border-radius: 12px; font-family: var(--font-display);
       font-weight: 700; font-size: 16px; text-decoration: none;
       box-shadow: 4px 4px 0px var(--text-main); cursor: pointer;
     }
-    .btn-outline:hover { background: var(--text-main); color: white; }
-
-    /* --- NAVIGATION --- */
     nav {
       padding: 24px; display: flex; justify-content: space-between; align-items: center;
       position: sticky; top: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); z-index: 50;
       border-bottom: 2px solid var(--text-main);
     }
-    .logo { 
-      font-family: var(--font-display); font-size: 28px; font-weight: 700; 
-      letter-spacing: -0.05em; display: flex; align-items: center; gap: 8px;
-    }
+    .logo { font-family: var(--font-display); font-size: 28px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
     .color-dot { width: 12px; height: 12px; background: var(--accent); border-radius: 50%; border: 2px solid var(--text-main); }
     .nav-links { display: flex; gap: 32px; }
     .nav-links a { color: var(--text-main); text-decoration: none; font-weight: 600; font-family: var(--font-display); }
-    @media(max-width: 768px) { .nav-links { display: none; } }
-
-    /* --- HERO --- */
-    .contact-hero {
-      text-align: center; padding: 80px 0 60px;
-    }
-
-    /* --- SPLIT LAYOUT --- */
-    .contact-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
-    }
-    @media(max-width: 768px) { .contact-grid { grid-template-columns: 1fr; gap: 40px; } }
-
-    /* --- INFO CARD --- */
-    .info-card {
-      background: var(--surface); padding: 40px; border-radius: var(--radius);
-      border: 2px solid var(--text-main); height: fit-content;
-    }
+    .contact-hero { text-align: center; padding: 80px 0 60px; }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
+    .info-card { background: var(--surface); padding: 40px; border-radius: var(--radius); border: 2px solid var(--text-main); }
     .info-item { margin-bottom: 30px; }
-    .info-label { 
-      font-family: var(--font-display); font-weight: 700; text-transform: uppercase; 
-      font-size: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
-    }
+    .info-label { font-family: var(--font-display); font-weight: 700; text-transform: uppercase; font-size: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
     .info-val { font-size: 18px; color: #444; }
-
-    /* --- FORM --- */
-    .contact-form {
-      padding: 0 20px;
-    }
     .form-group { margin-bottom: 24px; }
     .form-label { font-weight: 700; font-size: 14px; margin-bottom: 8px; display: block; }
-    
     .form-input, .form-textarea {
       width: 100%; padding: 16px; border: 2px solid var(--text-main); border-radius: 12px;
-      font-family: var(--font-body); font-size: 16px; background: white;
-      transition: 0.2s; outline: none;
+      font-family: var(--font-body); font-size: 16px; outline: none;
     }
-    .form-input:focus, .form-textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
-
-    /* --- MAP CONTAINER --- */
-    .map-box {
-      margin-top: 80px; height: 400px; width: 100%; background: #eee;
-      border-radius: var(--radius); border: 2px solid var(--text-main);
-      overflow: hidden; box-shadow: 8px 8px 0px var(--text-main);
-    }
-    .map-iframe { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%) contrast(1.1); }
-
-    /* --- FOOTER --- */
+    .map-box { margin-top: 80px; height: 400px; width: 100%; background: #eee; border-radius: var(--radius); border: 2px solid var(--text-main); overflow: hidden; box-shadow: 8px 8px 0px var(--text-main); }
+    .map-iframe { width: 100%; height: 100%; border: 0; filter: grayscale(100%) contrast(1.1); }
     footer { padding: 60px 24px; text-align: center; background: #111; color: white; margin-top: 80px; }
-
+    @media(max-width: 768px) { .contact-grid { grid-template-columns: 1fr; } .nav-links { display: none; } }
   </style>
 </head>
 <body>
 
   <nav>
-    <div class="logo" id="nav_logo">
-      <div class="color-dot"></div>
-      CANVAS.
-    </div>
+    <div class="logo" id="nav_logo"><div class="color-dot"></div> CANVAS.</div>
     <div class="nav-links">
       <a href="index.html">Home</a>
       <a href="about.html">Philosophy</a>
@@ -155,84 +89,69 @@
   </nav>
 
   <header class="container contact-hero">
-    <div class="label">Get In Touch</div>
-    <h1>Say Hello.</h1>
-    <p style="font-size: 18px; max-width: 600px; margin: 0 auto; color: #555;">
-      Have a question about a service, pricing, or accessibility? 
-      We are here to answer everything before you step in the door.
+    <div class="label" id="ns_contact_hero_label">Get In Touch</div>
+    <h1 id="ns_contact_hero_title">Say Hello.</h1>
+    <p id="ns_contact_hero_text" style="font-size: 18px; max-width: 600px; margin: 0 auto; color: #555;">
+      Have a question about a service, pricing, or accessibility? We are here to answer everything before you step in the door.
     </p>
   </header>
 
   <main class="container">
     <div class="contact-grid">
-      
       <div class="info-card">
         <div class="info-item">
-          <div class="info-label"><i data-lucide="map-pin" style="width:18px"></i> Location</div>
-          <div class="info-val" id="contact_address">
-            Loading...
-          </div>
+          <div class="info-label" id="ns_lbl_location"><i data-lucide="map-pin" style="width:18px"></i> Location</div>
+          <div class="info-val" id="contact_address">Loading...</div>
         </div>
-
         <div class="info-item">
-          <div class="info-label"><i data-lucide="mail" style="width:18px"></i> Email</div>
+          <div class="info-label" id="ns_lbl_email"><i data-lucide="mail" style="width:18px"></i> Email</div>
           <div class="info-val" id="contact_email">—</div>
         </div>
-
         <div class="info-item">
-          <div class="info-label"><i data-lucide="phone" style="width:18px"></i> Phone / Text</div>
+          <div class="info-label" id="ns_lbl_phone"><i data-lucide="phone" style="width:18px"></i> Phone / Text</div>
           <div class="info-val" id="contact_phone">—</div>
-          <div style="font-size: 12px; color: #666; margin-top: 4px;">* Text preferred for anxiety-free booking</div>
+          <div id="ns_phone_note" style="font-size: 12px; color: #666; margin-top: 4px;">* Text preferred for anxiety-free booking</div>
         </div>
-
         <div class="info-item" style="margin-bottom: 0;">
-          <div class="info-label"><i data-lucide="clock" style="width:18px"></i> Hours</div>
-          <div class="info-val" id="contact_hours">
-            Loading...
-          </div>
+          <div class="info-label" id="ns_lbl_hours"><i data-lucide="clock" style="width:18px"></i> Hours</div>
+          <div class="info-val" id="contact_hours">Loading...</div>
         </div>
       </div>
 
       <form class="contact-form" id="contact_form">
+        <h2 id="ns_form_title" style="margin-bottom: 16px;">Send Message</h2>
         <div class="form-group">
-          <label class="form-label">Name</label>
+          <label class="form-label" id="ns_lbl_name">Name</label>
           <input type="text" id="frm_name" class="form-input" placeholder="Your Name" required>
         </div>
-
         <div class="form-group">
-          <label class="form-label">Pronouns (Optional)</label>
+          <label class="form-label" id="ns_lbl_pronouns">Pronouns (Optional)</label>
           <input type="text" id="frm_pronouns" class="form-input" placeholder="e.g. She/They">
         </div>
-
         <div class="form-group">
-          <label class="form-label">Email</label>
+          <label class="form-label" id="ns_lbl_form_email">Email</label>
           <input type="email" id="frm_email" class="form-input" placeholder="name@example.com" required>
         </div>
-
         <div class="form-group">
-          <label class="form-label">Message</label>
+          <label class="form-label" id="ns_lbl_message">Message</label>
           <textarea id="frm_msg" class="form-textarea" rows="4" placeholder="How can we help?" required></textarea>
         </div>
-
-        <button type="submit" class="btn">Send Message</button>
+        <button type="submit" class="btn" id="ns_submit_btn">Send Message</button>
       </form>
-
     </div>
 
     <div class="map-box">
       <iframe id="map_frame" class="map-iframe" src=""></iframe>
     </div>
-
   </main>
 
   <footer>
     <div id="footer_logo" style="font-family: var(--font-display); font-size: 32px; font-weight: 700; margin-bottom: 20px;">CANVAS.</div>
     <p id="ns_address" style="color: #888; font-size: 14px; margin-bottom: 20px;"></p>
-    <p style="color: #888; font-size: 14px;">© 2026 Canvas Studio. A Safe Space for All.</p>
+    <p id="ns_footer_copyright" style="color: #888; font-size: 14px;">© 2026 Canvas Studio. A Safe Space for All.</p>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  
   <script>
     if (window.lucide) lucide.createIcons();
 
@@ -247,17 +166,12 @@
       return null;
     }
 
-    // ✅ PATCH 2: Context Helper
     function nsSetBusinessContext(businessId) {
       if (!businessId) return;
       window.NS_BUSINESS_ID = businessId;
       document.documentElement.setAttribute("data-business-id", businessId);
-      if (document.body) document.body.setAttribute("data-business-id", businessId);
       try {
         localStorage.setItem("ns_business_id", businessId);
-        sessionStorage.setItem("ns_business_id", businessId);
-      } catch(e) {}
-      try {
         const u = new URL(location.href);
         if (!u.searchParams.get("business_id")) {
           u.searchParams.set("business_id", businessId);
@@ -266,8 +180,7 @@
       } catch(e) {}
     }
 
-    // ✅ PATCH 3: Dynamic Script Loader
-    function nsLoadBookingEngine() {
+    async function nsLoadBookingEngine() {
       return new Promise((resolve) => {
         if (window.openBooking || (window.NetStudio && typeof window.NetStudio.open === "function")) return resolve(true);
         const s = document.createElement("script");
@@ -279,116 +192,119 @@
       });
     }
 
-    /* --- FORMATTERS --- */
-    function formatTime(t) {
-      if(!t) return "";
-      const [h, m] = t.split(":");
-      const H = parseInt(h);
-      const ampm = H >= 12 ? "PM" : "AM";
-      const H12 = H % 12 || 12;
-      return `${H12}:${m} ${ampm}`;
+    /* --- PATCH 2: JSON LOAD & APPLY --- */
+    async function nsLoadContactContent(businessId){
+      try{
+        const { data: site, error } = await sb.from("business_sites").select("content_json")
+          .eq("business_id", businessId).eq("template_key", "canvas_v1").maybeSingle();
+        if (error || !site?.content_json) return null;
+        return site.content_json.contact || null;
+      } catch(e){ return null; }
     }
 
-    // Sorter for text days
-    const SORTER = { "sunday":0, "monday":1, "tuesday":2, "wednesday":3, "thursday":4, "friday":5, "saturday":6 };
-    const DAYS = { "sunday":"Sun", "monday":"Mon", "tuesday":"Tue", "wednesday":"Wed", "thursday":"Thu", "friday":"Fri", "saturday":"Sat" };
+    function nsApplyContactContent(contact){
+      if (!contact) return;
+      // Hero
+      if (contact?.hero?.label && document.getElementById("ns_contact_hero_label")) document.getElementById("ns_contact_hero_label").textContent = contact.hero.label;
+      if (contact?.hero?.title && document.getElementById("ns_contact_hero_title")) document.getElementById("ns_contact_hero_title").textContent = contact.hero.title;
+      if (typeof contact?.hero?.text === "string" && document.getElementById("ns_contact_hero_text")) document.getElementById("ns_contact_hero_text").textContent = contact.hero.text;
+      // Info Labels
+      if (contact?.info?.location_label && document.getElementById("ns_lbl_location")) document.getElementById("ns_lbl_location").innerHTML = `<i data-lucide="map-pin" style="width:18px"></i> ${contact.info.location_label}`;
+      if (contact?.info?.email_label && document.getElementById("ns_lbl_email")) document.getElementById("ns_lbl_email").innerHTML = `<i data-lucide="mail" style="width:18px"></i> ${contact.info.email_label}`;
+      if (contact?.info?.phone_label && document.getElementById("ns_lbl_phone")) document.getElementById("ns_lbl_phone").innerHTML = `<i data-lucide="phone" style="width:18px"></i> ${contact.info.phone_label}`;
+      if (contact?.info?.hours_label && document.getElementById("ns_lbl_hours")) document.getElementById("ns_lbl_hours").innerHTML = `<i data-lucide="clock" style="width:18px"></i> ${contact.info.hours_label}`;
+      if (typeof contact?.info?.phone_note === "string" && document.getElementById("ns_phone_note")) document.getElementById("ns_phone_note").textContent = contact.info.phone_note;
+      // Form UI
+      if (contact?.ui?.form_title && document.getElementById("ns_form_title")) document.getElementById("ns_form_title").textContent = contact.ui.form_title;
+      if (contact?.ui?.name_label && document.getElementById("ns_lbl_name")) document.getElementById("ns_lbl_name").textContent = contact.ui.name_label;
+      if (contact?.ui?.name_placeholder && document.getElementById("frm_name")) document.getElementById("frm_name").setAttribute("placeholder", contact.ui.name_placeholder);
+      if (contact?.ui?.pronouns_label && document.getElementById("ns_lbl_pronouns")) document.getElementById("ns_lbl_pronouns").textContent = contact.ui.pronouns_label;
+      if (contact?.ui?.pronouns_placeholder && document.getElementById("frm_pronouns")) document.getElementById("frm_pronouns").setAttribute("placeholder", contact.ui.pronouns_placeholder);
+      if (contact?.ui?.email_label && document.getElementById("ns_lbl_form_email")) document.getElementById("ns_lbl_form_email").textContent = contact.ui.email_label;
+      if (contact?.ui?.email_placeholder && document.getElementById("frm_email")) document.getElementById("frm_email").setAttribute("placeholder", contact.ui.email_placeholder);
+      if (contact?.ui?.message_label && document.getElementById("ns_lbl_message")) document.getElementById("ns_lbl_message").textContent = contact.ui.message_label;
+      if (contact?.ui?.message_placeholder && document.getElementById("frm_msg")) document.getElementById("frm_msg").setAttribute("placeholder", contact.ui.message_placeholder);
+      if (contact?.ui?.submit_label && document.getElementById("ns_submit_btn")) document.getElementById("ns_submit_btn").textContent = contact.ui.submit_label;
+      // Footer & Mailto
+      if (contact?.footer?.copyright && document.getElementById("ns_footer_copyright")) document.getElementById("ns_footer_copyright").textContent = contact.footer.copyright;
+      if (contact?.ui?.mailto_subject) window.NS_CONTACT_SUBJECT = contact.ui.mailto_subject;
+      if (window.lucide) lucide.createIcons();
+    }
 
     /* --- DATA LOAD --- */
     const SB_URL = "https://jdvdgvolfmvlgyfklbwe.supabase.co";
     const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkdmRndm9sZm12bGd5ZmtsYndlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1Mjk5MDgsImV4cCI6MjA3OTEwNTkwOH0.xiAOgWof9En3jbCpY1vrYpj3HD-O6jMHbamIHTSflek";
     const sb = supabase.createClient(SB_URL, SB_KEY);
     const SLUG = nsGetSlug();
-
-    let businessEmail = ""; 
+    let businessEmail = "";
 
     async function loadCanvasContact() {
       if (!SLUG) return;
-
-      // 1. Business Info
-      const { data: biz } = await sb.from("business")
-        .select("id, name, street_address, city, state, phone, owner_email")
-        .eq("slug", SLUG).maybeSingle();
-      
+      const { data: biz } = await sb.from("business").select("*").eq("slug", SLUG).maybeSingle();
       if (!biz) return;
 
-      // ✅ PATCH 4: Context & Engine
       nsSetBusinessContext(biz.id);
       await nsLoadBookingEngine();
 
-      // Branding
+      // Load JSON Content
+      const contact = await nsLoadContactContent(biz.id);
+      nsApplyContactContent(contact);
+
+      // PATCH 3A: Branding Fix
       if (biz.name) {
-        const n = biz.name.toUpperCase() + ".";
+        const display = String(biz.name).toUpperCase() + ".";
         const navL = document.getElementById("nav_logo");
         const footL = document.getElementById("footer_logo");
-        // Preserve color dot in Nav
-        if (navL) navL.innerHTML = `<div class="color-dot"></div> ${name}`;
-        if (footL) footL.textContent = name;
+        if (navL) navL.innerHTML = `<div class="color-dot"></div> ${display}`;
+        if (footL) footL.textContent = display;
       }
 
-      // Address & Phone
-      const address = (biz.street_address && biz.city) 
-        ? `${biz.street_address}, ${biz.city}, ${biz.state}`
-        : "Address Loading...";
-      
-      if(document.getElementById("contact_address")) {
-        document.getElementById("contact_address").innerHTML = address.replace(",", "<br>");
-      }
-      if(document.getElementById("ns_address")) {
-        document.getElementById("ns_address").textContent = address;
-      }
-      if(document.getElementById("contact_phone")) {
-        document.getElementById("contact_phone").textContent = biz.phone || "—";
-      }
-
-      // Map Embed (Google Maps)
-      if (address !== "Address Loading...") {
-        const q = encodeURIComponent(address);
-        document.getElementById("map_frame").src = `http://googleusercontent.com/maps.google.com/maps?q=${q}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
-      }
-
-      // Email Store
+      // Contact Info
+      const address = (biz.street_address && biz.city) ? `${biz.street_address}, ${biz.city}, ${biz.state}` : "";
+      if(document.getElementById("contact_address")) document.getElementById("contact_address").innerHTML = address.replace(",", "<br>");
+      if(document.getElementById("ns_address")) document.getElementById("ns_address").textContent = address;
+      if(document.getElementById("contact_phone")) document.getElementById("contact_phone").textContent = biz.phone || "—";
       businessEmail = biz.owner_email || "";
       if(document.getElementById("contact_email")) document.getElementById("contact_email").textContent = businessEmail;
 
-      // 2. Fetch Hours
-      const { data: hours } = await sb.from("business_hours")
-        .select("day_of_week, open_time, close_time, is_closed")
-        .eq("business_id", biz.id);
+      // PATCH 3C: Map Fix
+      if (address) {
+        const q = encodeURIComponent(address);
+        document.getElementById("map_frame").src = `https://maps.google.com/maps?q=${q}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+      }
 
+      // Hours
+      const { data: hours } = await sb.from("business_hours").select("*").eq("business_id", biz.id);
       const hoursEl = document.getElementById("contact_hours");
       if (hours && hours.length > 0) {
-        // Sort
+        const SORTER = { "sunday":0, "monday":1, "tuesday":2, "wednesday":3, "thursday":4, "friday":5, "saturday":6 };
+        const DAYS = { "sunday":"Sun", "monday":"Mon", "tuesday":"Tue", "wednesday":"Wed", "thursday":"Thu", "friday":"Fri", "saturday":"Sat" };
         hours.sort((a, b) => SORTER[a.day_of_week] - SORTER[b.day_of_week]);
-
         let html = "";
         hours.forEach(h => {
-          const dayName = DAYS[h.day_of_week];
-          const timeStr = h.is_closed 
-            ? "Closed" 
-            : `${formatTime(h.open_time)} — ${formatTime(h.close_time)}`;
-          
-          html += `${dayName}: ${timeStr}<br>`;
+          const ampm = (t) => {
+            if(!t) return "";
+            let [hh, mm] = t.split(":");
+            let H = parseInt(hh);
+            return `${H % 12 || 12}:${mm} ${H >= 12 ? "PM" : "AM"}`;
+          };
+          html += `${DAYS[h.day_of_week]}: ${h.is_closed ? "Closed" : ampm(h.open_time) + " — " + ampm(h.close_time)}<br>`;
         });
         hoursEl.innerHTML = html;
       } else {
-        hoursEl.textContent = "Hours available upon request.";
+        // PATCH 3D: Hours Fallback
+        hoursEl.textContent = contact?.info?.hours_fallback || "Hours available upon request.";
       }
     }
 
     /* --- FORM HANDLER --- */
     document.getElementById("contact_form").addEventListener("submit", function(e) {
       e.preventDefault();
-      if (!businessEmail) {
-        alert("No contact email found.");
-        return;
-      }
-      const name = document.getElementById("frm_name").value;
-      const pronouns = document.getElementById("frm_pronouns").value;
-      const email = document.getElementById("frm_email").value;
-      const msg = document.getElementById("frm_msg").value;
-
-      const body = `Name: ${name} (${pronouns})%0D%0AEmail: ${email}%0D%0A%0D%0A${msg}`;
-      window.location.href = `mailto:${businessEmail}?subject=New Inquiry from Canvas Site&body=${body}`;
+      if (!businessEmail) return alert("No contact email found.");
+      const body = `Name: ${document.getElementById("frm_name").value} (${document.getElementById("frm_pronouns").value})%0D%0AEmail: ${document.getElementById("frm_email").value}%0D%0A%0D%0A${document.getElementById("frm_msg").value}`;
+      // PATCH 3E: Subject Fix
+      const subject = window.NS_CONTACT_SUBJECT || "New Inquiry from Canvas Site";
+      window.location.href = `mailto:${businessEmail}?subject=${encodeURIComponent(subject)}&body=${body}`;
     });
 
     loadCanvasContact();
