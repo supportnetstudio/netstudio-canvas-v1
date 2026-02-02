@@ -456,6 +456,16 @@
       }
 
       async function init() {
+        // ✅ If we’re on a custom domain, the Worker already knows the slug.
+        // Pull it from /__site.
+        if (!NS.SLUG) {
+            try {
+            const r = await fetch("/__site", { cache: "no-store" });
+            const j = await r.json();
+            if (j && j.slug) NS.SLUG = j.slug;
+            } catch (e) {}
+        }
+
         if (!NS.SLUG) { if($("site-error")) $("site-error").style.display = "block"; return; }
         const { data: biz } = await sb.from("business").select("*").eq("slug", NS.SLUG).maybeSingle();
         if (!biz) { if($("site-error")) $("site-error").style.display = "block"; return; }
