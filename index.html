@@ -59,7 +59,7 @@
       display: inline-block; background: var(--accent); color: white;
       padding: 16px 32px; border-radius: 12px; font-family: var(--font-display);
       font-weight: 700; font-size: 18px; text-decoration: none;
-      transition: 0.2s; border: 2px solid var(--accent);
+      transition: 0.2s; border: 2px solid var(--text-main);
       box-shadow: 4px 4px 0px var(--text-main);
       cursor: pointer;
     }
@@ -88,7 +88,82 @@
     .nav-links a { color: var(--text-main); text-decoration: none; font-weight: 600; font-family: var(--font-display); }
     @media(max-width: 768px) { .nav-links { display: none; } }
 
-    /* --- HERO (PATCHED: SINGLE COLUMN) --- */
+    /* ================================
+       CANVAS — QUICK ACTION RAIL
+    ==================================*/
+    .qa-rail{
+      position: sticky;
+      top: 82px; /* sits under nav */
+      z-index: 49;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid var(--text-main);
+    }
+    .qa-rail-inner{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .qa-tabs{
+      display: flex;
+      flex-wrap: wrap; 
+      gap: 10px;
+      align-items: center;
+    }
+    .qa-tab{
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border: 2px solid var(--text-main);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--text-main);
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      box-shadow: 2px 2px 0px var(--text-main);
+      transition: .15s;
+    }
+    .qa-tab:hover{
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--text-main);
+    }
+    .qa-tab.active{
+      background: var(--text-main);
+      color: #fff;
+    }
+    .qa-action{
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border: 2px solid var(--text-main);
+      background: var(--accent);
+      color: #fff;
+      border-radius: 12px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      box-shadow: 2px 2px 0px var(--text-main);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .qa-action:hover{
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--text-main);
+    }
+
+    /* --- HERO --- */
     .hero { padding: 80px 0; display: block; }
 
     /* --- MARQUEE --- */
@@ -119,9 +194,18 @@
     .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 60px; }
     .team-member { text-align: center; cursor: pointer; padding: 20px; border: 1px solid #333; border-radius: var(--radius); }
     
+    /* --- MOBILE RESPONSIVE --- */
     @media(max-width: 768px) { 
         .pricing-grid { grid-template-columns: 1fr; } 
         .team-grid { grid-template-columns: 1fr 1fr; }
+        .qa-rail{ top: 78px; }
+        .qa-rail-inner{ padding: 12px 16px; }
+        .qa-action{ padding: 10px 12px; font-size: 12px; }
+        .qa-tab{ padding: 9px 12px; font-size: 11px; }
+    }
+    @media (max-width: 420px){
+      .qa-rail-inner{ flex-direction: column; align-items: stretch; }
+      .qa-action{ width: 100%; justify-content: center; }
     }
 
     footer { padding: 60px 24px; text-align: center; background: #111; color: white; }
@@ -148,6 +232,23 @@
       </div>
       <a href="#book" class="btn" style="padding: 10px 24px; font-size: 16px;" onclick="nsOpenBooking(); return false;">Book Now</a>
     </nav>
+
+    <div class="qa-rail" id="ns_qa_rail">
+      <div class="qa-rail-inner">
+        <div class="qa-tabs" id="ns_quick_actions">
+          <a class="qa-tab" href="/">Home</a>
+          <a class="qa-tab" href="/about">About</a>
+          <a class="qa-tab" href="/gallery">Gallery</a>
+          <a class="qa-tab" href="/team">Team</a>
+          <a class="qa-tab" href="/contact">Contact</a>
+        </div>
+
+        <button class="qa-action" onclick="nsOpenBooking(); return false;">
+          <i data-lucide="calendar" style="width:16px;height:16px;"></i>
+          Book
+        </button>
+      </div>
+    </div>
 
     <header class="container hero">
       <div class="hero-text">
@@ -280,6 +381,23 @@
         window.NS_BUSINESS_ID = biz.id;
         await nsLoadBookingEngine();
 
+        // --- Quick Actions Active Tab (CANVAS) ---
+        (() => {
+          const wrap = $("ns_quick_actions");
+          if (!wrap) return;
+          const path = (location.pathname || "/").replace(/\/+$/, "") || "/";
+          const active = path === "/" ? "/" : 
+                         path.startsWith("/about") ? "/about" :
+                         path.startsWith("/gallery") ? "/gallery" :
+                         path.startsWith("/team") ? "/team" :
+                         path.startsWith("/contact") ? "/contact" : null;
+          wrap.querySelectorAll("a.qa-tab").forEach(a => {
+            const href = (a.getAttribute("href") || "").replace(/\/+$/, "") || "/";
+            if (active && href === active) a.classList.add("active");
+            else a.classList.remove("active");
+          });
+        })();
+
         const [siteRes, menuRes, teamRes] = await Promise.all([
           sb.from("business_sites").select("content_json").eq("business_id", biz.id).eq("template_key", NS.TEMPLATE).maybeSingle(),
           sb.from("menu_items").select("*").eq("business_id", biz.id).eq("is_active", true).limit(3),
@@ -293,7 +411,7 @@
               <h3 class="card-title">${s.name}</h3>
               <span class="card-price">$${(s.price_cents/100).toFixed(0)}+</span>
               <p class="card-desc">${s.description || "Customized service."}</p>
-              <button class="btn" style="width:100%; font-size: 14px;" onclick="nsOpenBooking(); return false;">Book</button>
+              <button class="btn" style="width:100%; font-size: 14px; margin-top:20px;" onclick="nsOpenBooking(); return false;">Book</button>
             </div>`).join("");
         }
 
@@ -311,4 +429,4 @@
     })();
   </script>
 </body>
-</html>```
+</html>
