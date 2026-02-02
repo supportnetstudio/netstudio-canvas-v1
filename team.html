@@ -15,7 +15,7 @@
     :root {
       --bg-body: #ffffff;
       --text-main: #111111;
-      --accent: #3b82f6; /* Cobalt Blue */
+      --accent: #3b82f6; 
       --surface: #f3f4f6;
       --border: #111111;
       --font-display: 'Space Grotesk', sans-serif;
@@ -56,7 +56,7 @@
     }
     .btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px var(--text-main); }
 
-    /* --- NAVIGATION --- */
+    /* --- NAVIGATION & DRAWER --- */
     nav {
       padding: 24px; display: flex; justify-content: space-between; align-items: center;
       position: sticky; top: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); z-index: 50;
@@ -67,19 +67,50 @@
       letter-spacing: -0.05em; display: flex; align-items: center; gap: 8px;
     }
     .color-dot { width: 12px; height: 12px; background: var(--accent); border-radius: 50%; border: 2px solid var(--text-main); }
-    .nav-links { display: flex; gap: 32px; }
-    .nav-links a { color: var(--text-main); text-decoration: none; font-weight: 600; font-family: var(--font-display); }
-    @media(max-width: 768px) { .nav-links { display: none; } }
+
+    .ns-burger{
+      display:inline-flex; align-items:center; justify-content:center;
+      width:46px; height:46px; border:2px solid var(--text-main);
+      background:#fff; border-radius:14px; box-shadow:3px 3px 0 var(--text-main);
+      cursor:pointer;
+    }
+    .ns-burger:active{ transform:translate(1px,1px); box-shadow:2px 2px 0 var(--text-main); }
+
+    .ns-drawer-overlay{ position:fixed; inset:0; background:rgba(0,0,0,.35); z-index:999; }
+
+    .ns-drawer{
+      position:fixed; top:0; right:0; height:100vh; width:min(360px, 92vw);
+      background:#fff; border-left:2px solid var(--text-main);
+      box-shadow:-8px 0 0 var(--text-main); transform:translateX(110%);
+      transition:transform .22s ease; z-index:1000; display:flex; flex-direction:column;
+    }
+    .ns-drawer.is-open{ transform:translateX(0); }
+
+    .ns-drawer-head{ display:flex; align-items:center; justify-content:space-between; padding:18px; border-bottom:2px solid var(--text-main); }
+    .ns-drawer-brand{ display:flex; align-items:center; gap:10px; font-family:var(--font-display); font-weight:700; letter-spacing:-0.04em; font-size:22px; }
+    .ns-drawer-dot{ width:12px; height:12px; background:var(--accent); border:2px solid var(--text-main); border-radius:50%; }
+    .ns-drawer-close{ width:42px; height:42px; display:inline-flex; align-items:center; justify-content:center; border:2px solid var(--text-main); background:#fff; border-radius:12px; box-shadow:3px 3px 0 var(--text-main); cursor:pointer; }
+    .ns-drawer-close:active{ transform:translate(1px,1px); box-shadow:2px 2px 0 var(--text-main); }
+    .ns-drawer-actions{ padding:18px; border-bottom:2px solid var(--text-main); }
+    .ns-drawer-book{
+      width:100%; display:flex; align-items:center; justify-content:center; gap:10px; padding:14px 16px;
+      border-radius:14px; border:2px solid var(--accent); background:var(--accent); color:#fff;
+      font-family:var(--font-display); font-weight:700; font-size:16px; box-shadow:4px 4px 0 var(--text-main); cursor:pointer;
+    }
+    .ns-drawer-book:active{ transform:translate(1px,1px); box-shadow:3px 3px 0 var(--text-main); }
+    .ns-drawer-links{ padding:10px 18px 18px; display:flex; flex-direction:column; gap:10px; }
+    .ns-drawer-links a{
+      text-decoration:none; color:var(--text-main); font-family:var(--font-display); font-weight:700;
+      text-transform:uppercase; letter-spacing:0.02em; font-size:18px; padding:14px 14px;
+      border:2px solid var(--text-main); border-radius:14px; box-shadow:3px 3px 0 var(--text-main); background:#fff;
+    }
+    .ns-drawer-links a:active{ transform:translate(1px,1px); box-shadow:2px 2px 0 var(--text-main); }
 
     /* --- HERO --- */
-    .team-hero {
-      text-align: center; padding: 80px 24px 60px;
-    }
+    .team-hero { text-align: center; padding: 80px 24px 60px; }
 
     /* --- ROSTER GRID --- */
-    .roster-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-bottom: 80px;
-    }
+    .roster-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-bottom: 80px; }
     @media(max-width: 900px) { .roster-grid { grid-template-columns: 1fr 1fr; } }
     @media(max-width: 600px) { .roster-grid { grid-template-columns: 1fr; } }
 
@@ -92,19 +123,10 @@
 
     .img-box {
       width: 100%; aspect-ratio: 1/1; border-radius: 12px; overflow: hidden;
-      border: 2px solid var(--text-main); margin-bottom: 20px;
-      position: relative;
+      border: 2px solid var(--text-main); margin-bottom: 20px; position: relative;
     }
     .artist-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); transition: 0.3s; }
     .artist-card:hover .artist-img { filter: grayscale(0%); }
-
-    /* Pronoun Badge */
-    .pronoun-badge {
-      position: absolute; bottom: 10px; right: 10px;
-      background: white; border: 2px solid var(--text-main); border-radius: 50px;
-      font-size: 10px; font-weight: 700; padding: 4px 10px; text-transform: uppercase;
-      box-shadow: 2px 2px 0px var(--text-main);
-    }
 
     .artist-name { font-size: 24px; font-weight: 700; margin-bottom: 4px; font-family: var(--font-display); }
     .artist-role { font-size: 14px; font-weight: 600; color: #666; margin-bottom: 20px; display: block; text-transform: uppercase; letter-spacing: 0.05em; }
@@ -121,21 +143,42 @@
       <div class="color-dot"></div>
       CANVAS.
     </div>
-    <div class="nav-links">
-      <a href="about.html">Philosophy</a>
-      <a href="services.html">Services</a>
-      <a href="team.html">Artists</a>
-    </div>
-    <a href="#book" class="btn" style="padding: 10px 24px; font-size: 16px;" onclick="nsOpenBooking(); return false;">Book Now</a>
+    <button class="ns-burger" id="nsBurgerBtn" aria-label="Open menu" aria-expanded="false" aria-controls="nsDrawer">
+      <i data-lucide="menu" style="width:22px;height:22px;"></i>
+    </button>
   </nav>
+
+  <div class="ns-drawer-overlay" id="nsDrawerOverlay" hidden></div>
+
+  <aside class="ns-drawer" id="nsDrawer" aria-hidden="true">
+    <div class="ns-drawer-head">
+      <div class="ns-drawer-brand" id="nsDrawerBrand">
+        <span class="ns-drawer-dot"></span>
+        <span id="nsDrawerBrandText">CANVAS.</span>
+      </div>
+      <button class="ns-drawer-close" id="nsDrawerClose" aria-label="Close menu">
+        <i data-lucide="x" style="width:20px;height:20px;"></i>
+      </button>
+    </div>
+    <div class="ns-drawer-actions">
+      <button class="ns-drawer-book" onclick="nsOpenBooking(); return false;">
+        <i data-lucide="calendar" style="width:16px;height:16px;"></i>
+        Book
+      </button>
+    </div>
+    <nav class="ns-drawer-links" id="nsDrawerLinks">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="team.html">Team</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </aside>
 
   <header class="team-hero container">
     <div class="label" id="team_hero_label">The Roster</div>
     <h1 id="team_hero_heading">Meet The Collective.</h1>
-    <p id="team_hero_text" style="font-size: 18px; max-width: 600px; margin: 0 auto; color: #555;">
-      We are a team of independent artists united by a shared philosophy: 
-      Respect the hair, respect the human.
-    </p>
+    <p id="team_hero_text" style="font-size: 18px; max-width: 600px; margin: 0 auto; color: #555;"></p>
   </header>
 
   <main class="container">
@@ -147,33 +190,44 @@
   <footer>
     <div id="ns_footer_brand" style="font-family: var(--font-display); font-size: 32px; font-weight: 700; margin-bottom: 14px;">CANVAS.</div>
     <p id="ns_footer_address" style="color:#bbb;font-size:14px;margin-bottom:10px;"></p>
-    <p id="footer_copy" style="color: #888; font-size: 14px;">© 2026 Canvas Studio. A Safe Space for All.</p>
+    <p id="footer_copy" style="color: #888; font-size: 14px;"></p>
   </footer>
 
   <script src="/netstudio_booking.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
   <script>
-    lucide.createIcons();
+    /* --- DRAWER LOGIC --- */
+    function nsSetupDrawer(bizNameUpperWithDot) {
+      const btn = document.getElementById("nsBurgerBtn");
+      const drawer = document.getElementById("nsDrawer");
+      const overlay = document.getElementById("nsDrawerOverlay");
+      const closeBtn = document.getElementById("nsDrawerClose");
+      const brandText = document.getElementById("nsDrawerBrandText");
 
-    function nsGetSlugFromHost() {
-      const qp = new URLSearchParams(location.search).get("b");
-      if (qp) return String(qp).trim().toLowerCase();
+      if (brandText && bizNameUpperWithDot) brandText.textContent = bizNameUpperWithDot;
+      if (!btn || !drawer || !overlay || !closeBtn) return;
 
-      const host = (location.hostname || "").toLowerCase();
-      if (!host || host === "localhost" || host.startsWith("127.")) return null;
+      const openDrawer = () => {
+        overlay.hidden = false;
+        drawer.classList.add("is-open");
+        drawer.setAttribute("aria-hidden", "false");
+        btn.setAttribute("aria-expanded", "true");
+      };
 
-      const ROOT = "netstudiodevelopment.com";
-      if (host === ROOT || host === "www." + ROOT) return null;
+      const closeDrawer = () => {
+        drawer.classList.remove("is-open");
+        drawer.setAttribute("aria-hidden", "true");
+        btn.setAttribute("aria-expanded", "false");
+        overlay.hidden = true;
+      };
 
-      if (host.endsWith("." + ROOT)) {
-        const slug = host.slice(0, -(ROOT.length + 1)).split(".")[0];
-        return slug || null;
-      }
-      return null;
+      btn.onclick = openDrawer;
+      closeBtn.onclick = closeDrawer;
+      overlay.onclick = closeDrawer;
+      document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeDrawer(); });
     }
 
-    // ✅ ONE booking bridge for all templates
     function nsOpenBooking(payload = {}) {
       if (window.NetStudio && typeof window.NetStudio.open === "function") {
         window.NetStudio.open(payload);
@@ -186,180 +240,82 @@
       console.warn("Booking engine not available yet");
     }
 
-    /* --- UI HELPER --- */
     function escapeHtml(s) {
       return String(s || "").replace(/[&<>"']/g, c => ({
         "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"
       }[c]));
     }
 
-    // --- Supabase ---
     const SB_URL = "https://jdvdgvolfmvlgyfklbwe.supabase.co";
     const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkdmRndm9sZm12bGd5ZmtsYndlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1Mjk5MDgsImV4cCI6MjA3OTEwNTkwOH0.xiAOgWof9En3jbCpY1vrYpj3HD-O6jMHbamIHTSflek";
     const sb = supabase.createClient(SB_URL, SB_KEY);
 
-    const BUSINESS_SLUG = nsGetSlugFromHost();
-    const TEMPLATE_KEY = "canvas_v1";
-
-    async function nsLoadCanvasContent(businessId) {
-      const { data: site, error } = await sb
-        .schema("public")
-        .from("business_sites")
-        .select("content_json")
-        .eq("business_id", businessId)
-        .eq("template_key", TEMPLATE_KEY)
-        .maybeSingle();
-
-      if (error) console.warn("content_json load error:", error);
-      return site?.content_json || {};
+    function nsGetSlug() {
+      const qp = new URLSearchParams(location.search).get("b");
+      if (qp) return qp.toLowerCase();
+      const host = location.hostname.toLowerCase();
+      const R = "netstudiodevelopment.com";
+      if (host.endsWith("." + R)) return host.split(".")[0];
+      return null;
     }
 
-    function nsApplyCanvasContent(content) {
-      const team = content?.team || {};
-      const hero = team?.hero || {};
-      const join = team?.join_card || {};
-      const footer = content?.footer || {};
+    const BUSINESS_SLUG = nsGetSlug();
 
-      // HERO
-      const elLabel = document.getElementById("team_hero_label");
-      const elHeading = document.getElementById("team_hero_heading");
-      const elText = document.getElementById("team_hero_text");
+    async function nsWireCardsToTeamMembers() {
+      if (!BUSINESS_SLUG) return;
 
-      if (elLabel) elLabel.textContent = String(hero.label ?? "The Roster");
-      if (elHeading) elHeading.textContent = String(hero.heading ?? "Meet The Collective.");
-      if (elText) elText.textContent = String(hero.text ?? "We are a team of independent artists united by a shared philosophy: Respect the hair, respect the human.");
+      const { data: biz } = await sb.from("business").select("*").eq("slug", BUSINESS_SLUG).maybeSingle();
+      if (!biz) return;
 
-      // FOOTER COPYRIGHT
-      const elCopy = document.getElementById("footer_copy");
-      if (elCopy) elCopy.textContent = String(
-        footer.copyright ?? "© 2026 Canvas Studio. A Safe Space for All."
-      );
+      const bName = (biz.name || "CANVAS").toUpperCase() + ".";
+      document.getElementById("ns_brand").innerHTML = `<div class="color-dot"></div> ${bName}`;
+      document.getElementById("ns_footer_brand").textContent = bName;
+      document.getElementById("ns_footer_address").textContent = [biz.street_address, biz.city, biz.state].filter(Boolean).join(", ");
+      
+      nsSetupDrawer(bName);
 
-      // JOIN CARD CONFIG (store globally so renderTeam can use it)
-      window.__NS_CANVAS_JOIN__ = {
-        enabled: join.enabled !== false,
-        emoji: String(join.emoji ?? "👋"),
-        heading: String(join.heading ?? "Join Us"),
-        text: String(join.text ?? "Are you an independent artist looking for a home?"),
-        button_label: String(join.button_label ?? "Apply Now"),
-        button_href: String(join.button_href ?? "contact.html")
-      };
-    }
+      const { data: site } = await sb.from("business_sites").select("content_json").eq("business_id", biz.id).eq("template_key", "canvas_v1").maybeSingle();
+      const content = site?.content_json || {};
+      const teamC = content.team || {};
+      const hero = teamC.hero || {};
+      const join = teamC.join_card || {};
 
-    async function nsApplyBrand() {
-      if (!BUSINESS_SLUG) return null;
+      document.getElementById("team_hero_label").textContent = hero.label || "The Roster";
+      document.getElementById("team_hero_heading").textContent = hero.heading || "Meet The Collective.";
+      document.getElementById("team_hero_text").textContent = hero.text || "We are a team of independent artists united by a shared philosophy.";
+      document.getElementById("footer_copy").textContent = content.footer?.copyright || `© ${new Date().getFullYear()} ${biz.name}. A Safe Space for All.`;
 
-      const { data: biz } = await sb
-        .schema("public")
-        .from("business")
-        .select("id,name,street_address,city,state")
-        .eq("slug", BUSINESS_SLUG)
-        .maybeSingle();
+      const { data: members } = await sb.from("team_members").select("*").eq("business_id", biz.id).eq("is_active", true).not("auth_user_id", "is", null).order("created_at", { ascending: true });
 
-      if (!biz?.id) return null;
-
-      // Header brand (preserve the color dot)
-      const b1 = document.getElementById("ns_brand");
-      if (b1 && biz.name) {
-        // Find the text node after the dot and replace it
-        b1.childNodes[b1.childNodes.length - 1].textContent = " " + biz.name.toUpperCase() + ".";
-      }
-
-      // Footer brand
-      const b2 = document.getElementById("ns_footer_brand");
-      if (b2 && biz.name) b2.textContent = biz.name.toUpperCase() + ".";
-
-      // Footer address
-      const addr = document.getElementById("ns_footer_address");
-      if (addr && biz.street_address) {
-        addr.textContent = [biz.street_address, biz.city, biz.state].filter(Boolean).join(", ");
-      }
-
-      return biz;
-    }
-
-    function renderTeam(members) {
       const grid = document.getElementById("roster_grid");
-      if (!grid) return;
-
       grid.innerHTML = "";
 
-      if (!members.length) {
-        grid.innerHTML = `
-          <div style="grid-column:1/-1;text-align:center;padding:60px 0;color:#888;">
-            No active artists found.
-          </div>
-        `;
-        // Even if no artists, we might want to show the Join card, see below
-      }
+      const fallbackImg = "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=600";
 
-      const fallbackImg =
-        "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=600";
-
-      members.forEach(m => {
-        const id = String(m.id || "").trim();
-        const name = escapeHtml(m.name || "Artist");
-        const role = escapeHtml(m.role || "Stylist");
-        const img = escapeHtml(m.profile_image_url || m.photo_url || fallbackImg);
-
-        // Render Canvas Card
+      (members || []).forEach(m => {
+        const img = m.profile_image_url || m.photo_url || fallbackImg;
         grid.insertAdjacentHTML("beforeend", `
           <div class="artist-card">
-            <div class="img-box">
-              <img src="${img}" class="artist-img" alt="${name}">
-              </div>
-            <div class="artist-name">${name}</div>
-            <span class="artist-role">${role}</span>
-            <button class="btn" style="width:100%; font-size: 14px;" 
-              onclick="nsOpenBooking({ staff_id: '${id}' }); return false;">
-              Book ${name}
-            </button>
+            <div class="img-box"><img src="${img}" class="artist-img" alt="${m.name}"></div>
+            <div class="artist-name">${escapeHtml(m.name)}</div>
+            <span class="artist-role">${escapeHtml(m.role || "Stylist")}</span>
+            <button class="btn" style="width:100%; font-size: 14px;" onclick="nsOpenBooking({ staff_id: '${m.id}' }); return false;">Book ${m.name.split(' ')[0]}</button>
           </div>
         `);
       });
 
-      // Join card (from content_json; default on)
-      const jc = window.__NS_CANVAS_JOIN__ || { enabled: true };
-      if (jc.enabled !== false) {
+      if (join.enabled !== false) {
         grid.insertAdjacentHTML("beforeend", `
           <div class="artist-card" style="background: var(--text-main); color: white; display:flex; flex-direction: column; justify-content: center;">
-            <div style="font-size: 48px; margin-bottom: 20px;">${escapeHtml(jc.emoji || "👋")}</div>
-            <div class="artist-name" style="color: white;">${escapeHtml(jc.heading || "Join Us")}</div>
-            <p style="font-size: 14px; margin-bottom: 24px; color: #ccc;">${escapeHtml(jc.text || "")}</p>
-            <button class="btn"
-              style="width:100%; font-size: 14px; background: white; color: black; border-color: white;"
-              onclick="window.location.href='${escapeHtml(jc.button_href || "contact.html")}'">
-              ${escapeHtml(jc.button_label || "Apply Now")}
-            </button>
+            <div style="font-size: 48px; margin-bottom: 20px;">${escapeHtml(join.emoji || "👋")}</div>
+            <div class="artist-name" style="color: white;">${escapeHtml(join.heading || "Join Us")}</div>
+            <p style="font-size: 14px; margin-bottom: 24px; color: #ccc;">${escapeHtml(join.text || "Independent artists looking for a home?")}</p>
+            <button class="btn" style="width:100%; font-size: 14px; background: white; color: black; border-color: white;" onclick="window.location.href='${escapeHtml(join.button_href || "contact.html")}'">${escapeHtml(join.button_label || "Apply Now")}</button>
           </div>
         `);
       }
-    }
 
-    async function nsWireCardsToTeamMembers() {
-      const biz = await nsApplyBrand();
-      if (!biz?.id) return;
-
-      // 1) Load + apply content_json (hero/footer/join card)
-      const content = await nsLoadCanvasContent(biz.id);
-      nsApplyCanvasContent(content);
-
-      // 2) Team members (cards)
-      const { data: members, error } = await sb
-        .schema("public")
-        .from("team_members")
-        .select("id,name,role,profile_image_url,photo_url,auth_user_id,is_active,created_at")
-        .eq("business_id", biz.id)
-        .eq("is_active", true)
-        .not("auth_user_id", "is", null)
-        .order("created_at", { ascending: true });
-
-      if (error) {
-        console.warn("Error loading team:", error);
-        return;
-      }
-
-      renderTeam(members || []);
+      if (window.lucide) lucide.createIcons();
     }
 
     nsWireCardsToTeamMembers();
