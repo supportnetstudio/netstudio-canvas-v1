@@ -17,23 +17,30 @@
   </script>
 
   <style>
+    /* --- CORE VARIABLES --- */
     :root {
       --bg-body: #ffffff; --text-main: #111111; --accent: #3b82f6; 
       --surface: #f3f4f6; --border: #111111; --radius: 16px;
       --font-display: 'Space Grotesk', sans-serif; --font-body: 'Inter', sans-serif;
     }
+
+    /* --- RESET & BASE --- */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: var(--bg-body); color: var(--text-main); font-family: var(--font-body); line-height: 1.5; overflow-x: hidden; }
     h1, h2, h3 { font-family: var(--font-display); line-height: 1.1; letter-spacing: -0.03em; }
     h1 { font-size: clamp(48px, 8vw, 80px); font-weight: 700; margin-bottom: 24px; }
     h2 { font-size: 32px; font-weight: 700; margin-bottom: 16px; }
+
     .label {
       font-family: var(--font-display); font-weight: 700; font-size: 14px; 
       text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent);
       display: inline-block; border: 2px solid var(--accent); padding: 8px 16px;
       border-radius: 50px; margin-bottom: 24px; background: white;
     }
+
     .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    /* --- BUTTONS --- */
     .btn {
       display: inline-block; background: var(--accent); color: white;
       padding: 16px 32px; border-radius: 12px; font-family: var(--font-display);
@@ -42,12 +49,8 @@
       box-shadow: 4px 4px 0px var(--text-main); cursor: pointer; text-align: center;
     }
     .btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px var(--text-main); }
-    .btn-outline {
-      background: white; color: var(--text-main); border: 2px solid var(--text-main);
-      padding: 10px 24px; border-radius: 12px; font-family: var(--font-display);
-      font-weight: 700; font-size: 16px; text-decoration: none;
-      box-shadow: 4px 4px 0px var(--text-main); cursor: pointer;
-    }
+
+    /* --- NAVIGATION & DRAWER --- */
     nav {
       padding: 24px; display: flex; justify-content: space-between; align-items: center;
       position: sticky; top: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); z-index: 50;
@@ -55,8 +58,46 @@
     }
     .logo { font-family: var(--font-display); font-size: 28px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
     .color-dot { width: 12px; height: 12px; background: var(--accent); border-radius: 50%; border: 2px solid var(--text-main); }
-    .nav-links { display: flex; gap: 32px; }
-    .nav-links a { color: var(--text-main); text-decoration: none; font-weight: 600; font-family: var(--font-display); }
+
+    .ns-burger{
+      display:inline-flex; align-items:center; justify-content:center;
+      width:46px; height:46px; border:2px solid var(--text-main);
+      background:#fff; border-radius:14px; box-shadow:3px 3px 0 var(--text-main);
+      cursor:pointer;
+    }
+    .ns-burger:active{ transform:translate(1px,1px); box-shadow:2px 2px 0 var(--text-main); }
+
+    .ns-drawer-overlay{ position:fixed; inset:0; background:rgba(0,0,0,.35); z-index:999; }
+
+    .ns-drawer{
+      position:fixed; top:0; right:0; height:100vh; width:min(360px, 92vw);
+      background:#fff; border-left:2px solid var(--text-main);
+      box-shadow:-8px 0 0 var(--text-main); transform:translateX(110%);
+      transition:transform .22s ease; z-index:1000; display:flex; flex-direction:column;
+    }
+    .ns-drawer.is-open{ transform:translateX(0); }
+
+    .ns-drawer-head{ display:flex; align-items:center; justify-content:space-between; padding:18px; border-bottom:2px solid var(--text-main); }
+    .ns-drawer-brand{ display:flex; align-items:center; gap:10px; font-family:var(--font-display); font-weight:700; letter-spacing:-0.04em; font-size:22px; }
+    .ns-drawer-dot{ width:12px; height:12px; background:var(--accent); border:2px solid var(--text-main); border-radius:50%; }
+    .ns-drawer-close{ width:42px; height:42px; display:inline-flex; align-items:center; justify-content:center; border:2px solid var(--text-main); background:#fff; border-radius:12px; box-shadow:3px 3px 0 var(--text-main); cursor:pointer; }
+    .ns-drawer-close:active{ transform:translate(1px,1px); box-shadow:2px 2px 0 var(--text-main); }
+    .ns-drawer-actions{ padding:18px; border-bottom:2px solid var(--text-main); }
+    .ns-drawer-book{
+      width:100%; display:flex; align-items:center; justify-content:center; gap:10px; padding:14px 16px;
+      border-radius:14px; border:2px solid var(--accent); background:var(--accent); color:#fff;
+      font-family:var(--font-display); font-weight:700; font-size:16px; box-shadow:4px 4px 0 var(--text-main); cursor:pointer;
+    }
+    .ns-drawer-book:active{ transform:translate(1px,1px); box-shadow:3px 3px 0 var(--text-main); }
+    .ns-drawer-links{ padding:10px 18px 18px; display:flex; flex-direction:column; gap:10px; }
+    .ns-drawer-links a{
+      text-decoration:none; color:var(--text-main); font-family:var(--font-display); font-weight:700;
+      text-transform:uppercase; letter-spacing:0.02em; font-size:18px; padding:14px 14px;
+      border:2px solid var(--text-main); border-radius:14px; box-shadow:3px 3px 0 var(--text-main); background:#fff;
+    }
+    .ns-drawer-links a:active{ transform:translate(1px,1px); box-shadow:2px 2px 0 var(--text-main); }
+
+    /* --- CONTACT CONTENT --- */
     .contact-hero { text-align: center; padding: 80px 0 60px; }
     .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
     .info-card { background: var(--surface); padding: 40px; border-radius: var(--radius); border: 2px solid var(--text-main); }
@@ -71,29 +112,51 @@
     }
     .map-box { margin-top: 80px; height: 400px; width: 100%; background: #eee; border-radius: var(--radius); border: 2px solid var(--text-main); overflow: hidden; box-shadow: 8px 8px 0px var(--text-main); }
     .map-iframe { width: 100%; height: 100%; border: 0; filter: grayscale(100%) contrast(1.1); }
+    
     footer { padding: 60px 24px; text-align: center; background: #111; color: white; margin-top: 80px; }
-    @media(max-width: 768px) { .contact-grid { grid-template-columns: 1fr; } .nav-links { display: none; } }
+    @media(max-width: 768px) { .contact-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
 
   <nav>
     <div class="logo" id="nav_logo"><div class="color-dot"></div> CANVAS.</div>
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="about.html">Philosophy</a>
-      <a href="services.html">Services</a>
-      <a href="team.html">Artists</a>
-    </div>
-    <a href="#book" class="btn-outline" onclick="window.nsOpenBooking(); return false;">Book Now</a>
+    <button class="ns-burger" id="nsBurgerBtn" aria-label="Open menu" aria-expanded="false" aria-controls="nsDrawer">
+      <i data-lucide="menu" style="width:22px;height:22px;"></i>
+    </button>
   </nav>
+
+  <div class="ns-drawer-overlay" id="nsDrawerOverlay" hidden></div>
+
+  <aside class="ns-drawer" id="nsDrawer" aria-hidden="true">
+    <div class="ns-drawer-head">
+      <div class="ns-drawer-brand" id="nsDrawerBrand">
+        <span class="ns-drawer-dot"></span>
+        <span id="nsDrawerBrandText">CANVAS.</span>
+      </div>
+      <button class="ns-drawer-close" id="nsDrawerClose" aria-label="Close menu">
+        <i data-lucide="x" style="width:20px;height:20px;"></i>
+      </button>
+    </div>
+    <div class="ns-drawer-actions">
+      <button class="ns-drawer-book" onclick="window.nsOpenBooking(); return false;">
+        <i data-lucide="calendar" style="width:16px;height:16px;"></i>
+        Book
+      </button>
+    </div>
+    <nav class="ns-drawer-links" id="nsDrawerLinks">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="team.html">Team</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </aside>
 
   <header class="container contact-hero">
     <div class="label" id="ns_contact_hero_label">Get In Touch</div>
     <h1 id="ns_contact_hero_title">Say Hello.</h1>
-    <p id="ns_contact_hero_text" style="font-size: 18px; max-width: 600px; margin: 0 auto; color: #555;">
-      Have a question about a service, pricing, or accessibility? We are here to answer everything before you step in the door.
-    </p>
+    <p id="ns_contact_hero_text" style="font-size: 18px; max-width: 600px; margin: 0 auto; color: #555;"></p>
   </header>
 
   <main class="container">
@@ -153,161 +216,151 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    if (window.lucide) lucide.createIcons();
+    (() => {
+      const $ = (id) => document.getElementById(id);
 
-    /* --- UTILS --- */
-    function nsGetSlug() {
-      const q = new URLSearchParams(location.search).get("b");
-      if (q) return q.toLowerCase();
-      const h = location.hostname.toLowerCase();
-      const R = "netstudiodevelopment.com";
-      if (!h || h === "localhost" || h.startsWith("127.") || h === R || h === "www." + R) return null;
-      if (h.endsWith("." + R)) return h.slice(0, -(R.length + 1)).split(".")[0];
-      return null;
-    }
+      /* --- DRAWER LOGIC --- */
+      function nsSetupDrawer(bizNameUpperWithDot) {
+        const btn = $("nsBurgerBtn");
+        const drawer = $("nsDrawer");
+        const overlay = $("nsDrawerOverlay");
+        const closeBtn = $("nsDrawerClose");
+        const brandText = $("nsDrawerBrandText");
 
-    function nsSetBusinessContext(businessId) {
-      if (!businessId) return;
-      window.NS_BUSINESS_ID = businessId;
-      document.documentElement.setAttribute("data-business-id", businessId);
-      try {
-        localStorage.setItem("ns_business_id", businessId);
-        const u = new URL(location.href);
-        if (!u.searchParams.get("business_id")) {
-          u.searchParams.set("business_id", businessId);
-          history.replaceState({}, "", u.toString());
-        }
-      } catch(e) {}
-    }
+        if (brandText && bizNameUpperWithDot) brandText.textContent = bizNameUpperWithDot;
+        if (!btn || !drawer || !overlay || !closeBtn) return;
 
-    async function nsLoadBookingEngine() {
-      return new Promise((resolve) => {
-        if (window.openBooking || (window.NetStudio && typeof window.NetStudio.open === "function")) return resolve(true);
-        const s = document.createElement("script");
-        s.src = "/netstudio_booking.js";
-        s.async = true;
-        s.onload = () => resolve(true);
-        s.onerror = () => resolve(false);
-        document.body.appendChild(s);
-      });
-    }
+        const openDrawer = () => {
+          overlay.hidden = false;
+          drawer.classList.add("is-open");
+          drawer.setAttribute("aria-hidden", "false");
+          btn.setAttribute("aria-expanded", "true");
+        };
 
-    /* --- PATCH 2: JSON LOAD & APPLY --- */
-    async function nsLoadContactContent(businessId){
-      try{
-        const { data: site, error } = await sb.from("business_sites").select("content_json")
-          .eq("business_id", businessId).eq("template_key", "canvas_v1").maybeSingle();
-        if (error || !site?.content_json) return null;
-        return site.content_json.contact || null;
-      } catch(e){ return null; }
-    }
+        const closeDrawer = () => {
+          drawer.classList.remove("is-open");
+          drawer.setAttribute("aria-hidden", "true");
+          btn.setAttribute("aria-expanded", "false");
+          overlay.hidden = true;
+        };
 
-    function nsApplyContactContent(contact){
-      if (!contact) return;
-      // Hero
-      if (contact?.hero?.label && document.getElementById("ns_contact_hero_label")) document.getElementById("ns_contact_hero_label").textContent = contact.hero.label;
-      if (contact?.hero?.title && document.getElementById("ns_contact_hero_title")) document.getElementById("ns_contact_hero_title").textContent = contact.hero.title;
-      if (typeof contact?.hero?.text === "string" && document.getElementById("ns_contact_hero_text")) document.getElementById("ns_contact_hero_text").textContent = contact.hero.text;
-      // Info Labels
-      if (contact?.info?.location_label && document.getElementById("ns_lbl_location")) document.getElementById("ns_lbl_location").innerHTML = `<i data-lucide="map-pin" style="width:18px"></i> ${contact.info.location_label}`;
-      if (contact?.info?.email_label && document.getElementById("ns_lbl_email")) document.getElementById("ns_lbl_email").innerHTML = `<i data-lucide="mail" style="width:18px"></i> ${contact.info.email_label}`;
-      if (contact?.info?.phone_label && document.getElementById("ns_lbl_phone")) document.getElementById("ns_lbl_phone").innerHTML = `<i data-lucide="phone" style="width:18px"></i> ${contact.info.phone_label}`;
-      if (contact?.info?.hours_label && document.getElementById("ns_lbl_hours")) document.getElementById("ns_lbl_hours").innerHTML = `<i data-lucide="clock" style="width:18px"></i> ${contact.info.hours_label}`;
-      if (typeof contact?.info?.phone_note === "string" && document.getElementById("ns_phone_note")) document.getElementById("ns_phone_note").textContent = contact.info.phone_note;
-      // Form UI
-      if (contact?.ui?.form_title && document.getElementById("ns_form_title")) document.getElementById("ns_form_title").textContent = contact.ui.form_title;
-      if (contact?.ui?.name_label && document.getElementById("ns_lbl_name")) document.getElementById("ns_lbl_name").textContent = contact.ui.name_label;
-      if (contact?.ui?.name_placeholder && document.getElementById("frm_name")) document.getElementById("frm_name").setAttribute("placeholder", contact.ui.name_placeholder);
-      if (contact?.ui?.pronouns_label && document.getElementById("ns_lbl_pronouns")) document.getElementById("ns_lbl_pronouns").textContent = contact.ui.pronouns_label;
-      if (contact?.ui?.pronouns_placeholder && document.getElementById("frm_pronouns")) document.getElementById("frm_pronouns").setAttribute("placeholder", contact.ui.pronouns_placeholder);
-      if (contact?.ui?.email_label && document.getElementById("ns_lbl_form_email")) document.getElementById("ns_lbl_form_email").textContent = contact.ui.email_label;
-      if (contact?.ui?.email_placeholder && document.getElementById("frm_email")) document.getElementById("frm_email").setAttribute("placeholder", contact.ui.email_placeholder);
-      if (contact?.ui?.message_label && document.getElementById("ns_lbl_message")) document.getElementById("ns_lbl_message").textContent = contact.ui.message_label;
-      if (contact?.ui?.message_placeholder && document.getElementById("frm_msg")) document.getElementById("frm_msg").setAttribute("placeholder", contact.ui.message_placeholder);
-      if (contact?.ui?.submit_label && document.getElementById("ns_submit_btn")) document.getElementById("ns_submit_btn").textContent = contact.ui.submit_label;
-      // Footer & Mailto
-      if (contact?.footer?.copyright && document.getElementById("ns_footer_copyright")) document.getElementById("ns_footer_copyright").textContent = contact.footer.copyright;
-      if (contact?.ui?.mailto_subject) window.NS_CONTACT_SUBJECT = contact.ui.mailto_subject;
-      if (window.lucide) lucide.createIcons();
-    }
-
-    /* --- DATA LOAD --- */
-    const SB_URL = "https://jdvdgvolfmvlgyfklbwe.supabase.co";
-    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkdmRndm9sZm12bGd5ZmtsYndlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1Mjk5MDgsImV4cCI6MjA3OTEwNTkwOH0.xiAOgWof9En3jbCpY1vrYpj3HD-O6jMHbamIHTSflek";
-    const sb = supabase.createClient(SB_URL, SB_KEY);
-    const SLUG = nsGetSlug();
-    let businessEmail = "";
-
-    async function loadCanvasContact() {
-      if (!SLUG) return;
-      const { data: biz } = await sb.from("business").select("*").eq("slug", SLUG).maybeSingle();
-      if (!biz) return;
-
-      nsSetBusinessContext(biz.id);
-      await nsLoadBookingEngine();
-
-      // Load JSON Content
-      const contact = await nsLoadContactContent(biz.id);
-      nsApplyContactContent(contact);
-
-      // PATCH 3A: Branding Fix
-      if (biz.name) {
-        const display = String(biz.name).toUpperCase() + ".";
-        const navL = document.getElementById("nav_logo");
-        const footL = document.getElementById("footer_logo");
-        if (navL) navL.innerHTML = `<div class="color-dot"></div> ${display}`;
-        if (footL) footL.textContent = display;
+        btn.onclick = openDrawer;
+        closeBtn.onclick = closeDrawer;
+        overlay.onclick = closeDrawer;
+        document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeDrawer(); });
       }
 
-      // Contact Info
-      const address = (biz.street_address && biz.city) ? `${biz.street_address}, ${biz.city}, ${biz.state}` : "";
-      if(document.getElementById("contact_address")) document.getElementById("contact_address").innerHTML = address.replace(",", "<br>");
-      if(document.getElementById("ns_address")) document.getElementById("ns_address").textContent = address;
-      if(document.getElementById("contact_phone")) document.getElementById("contact_phone").textContent = biz.phone || "—";
-      businessEmail = biz.owner_email || "";
-      if(document.getElementById("contact_email")) document.getElementById("contact_email").textContent = businessEmail;
-
-      // PATCH 3C: Map Fix
-      if (address) {
-        const q = encodeURIComponent(address);
-        document.getElementById("map_frame").src = `https://maps.google.com/maps?q=${q}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+      /* --- UTILS --- */
+      function nsGetSlug() {
+        const q = new URLSearchParams(location.search).get("b");
+        if (q) return q.toLowerCase();
+        const h = location.hostname.toLowerCase();
+        const R = "netstudiodevelopment.com";
+        if (h.endsWith("." + R)) return h.split(".")[0];
+        return null;
       }
 
-      // Hours
-      const { data: hours } = await sb.from("business_hours").select("*").eq("business_id", biz.id);
-      const hoursEl = document.getElementById("contact_hours");
-      if (hours && hours.length > 0) {
-        const SORTER = { "sunday":0, "monday":1, "tuesday":2, "wednesday":3, "thursday":4, "friday":5, "saturday":6 };
-        const DAYS = { "sunday":"Sun", "monday":"Mon", "tuesday":"Tue", "wednesday":"Wed", "thursday":"Thu", "friday":"Fri", "saturday":"Sat" };
-        hours.sort((a, b) => SORTER[a.day_of_week] - SORTER[b.day_of_week]);
-        let html = "";
-        hours.forEach(h => {
-          const ampm = (t) => {
-            if(!t) return "";
-            let [hh, mm] = t.split(":");
-            let H = parseInt(hh);
-            return `${H % 12 || 12}:${mm} ${H >= 12 ? "PM" : "AM"}`;
-          };
-          html += `${DAYS[h.day_of_week]}: ${h.is_closed ? "Closed" : ampm(h.open_time) + " — " + ampm(h.close_time)}<br>`;
+      function nsSetBusinessContext(businessId) {
+        if (!businessId) return;
+        window.NS_BUSINESS_ID = businessId;
+        document.documentElement.setAttribute("data-business-id", businessId);
+      }
+
+      async function nsLoadBookingEngine() {
+        return new Promise((resolve) => {
+          if (window.openBooking || (window.NetStudio && typeof window.NetStudio.open === "function")) return resolve(true);
+          const s = document.createElement("script");
+          s.src = "/netstudio_booking.js";
+          s.async = true;
+          s.onload = () => resolve(true);
+          s.onerror = () => resolve(false);
+          document.body.appendChild(s);
         });
-        hoursEl.innerHTML = html;
-      } else {
-        // PATCH 3D: Hours Fallback
-        hoursEl.textContent = contact?.info?.hours_fallback || "Hours available upon request.";
       }
-    }
 
-    /* --- FORM HANDLER --- */
-    document.getElementById("contact_form").addEventListener("submit", function(e) {
-      e.preventDefault();
-      if (!businessEmail) return alert("No contact email found.");
-      const body = `Name: ${document.getElementById("frm_name").value} (${document.getElementById("frm_pronouns").value})%0D%0AEmail: ${document.getElementById("frm_email").value}%0D%0A%0D%0A${document.getElementById("frm_msg").value}`;
-      // PATCH 3E: Subject Fix
-      const subject = window.NS_CONTACT_SUBJECT || "New Inquiry from Canvas Site";
-      window.location.href = `mailto:${businessEmail}?subject=${encodeURIComponent(subject)}&body=${body}`;
-    });
+      const SB_URL = "https://jdvdgvolfmvlgyfklbwe.supabase.co";
+      const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkdmRndm9sZm12bGd5ZmtsYndlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1Mjk5MDgsImV4cCI6MjA3OTEwNTkwOH0.xiAOgWof9En3jbCpY1vrYpj3HD-O6jMHbamIHTSflek";
+      const sb = supabase.createClient(SB_URL, SB_KEY);
+      let businessEmail = "";
 
-    loadCanvasContact();
+      async function init() {
+        const SLUG = nsGetSlug();
+        if (!SLUG) return;
+        
+        const { data: biz } = await sb.from("business").select("*").eq("slug", SLUG).maybeSingle();
+        if (!biz) return;
+
+        nsSetBusinessContext(biz.id);
+        await nsLoadBookingEngine();
+
+        // Branding
+        const bDisplay = (biz.name || "CANVAS").toUpperCase() + ".";
+        if ($("nav_logo")) $("nav_logo").innerHTML = `<div class="color-dot"></div> ${bDisplay}`;
+        if ($("footer_logo")) $("footer_logo").textContent = bDisplay;
+        nsSetupDrawer(bDisplay);
+
+        // Content JSON
+        const { data: site } = await sb.from("business_sites").select("content_json")
+          .eq("business_id", biz.id).eq("template_key", "canvas_v1").maybeSingle();
+        
+        const contact = site?.content_json?.contact || {};
+        
+        // Hero Apply
+        if ($("ns_contact_hero_label")) $("ns_contact_hero_label").textContent = contact.hero?.label || "Get In Touch";
+        if ($("ns_contact_hero_title")) $("ns_contact_hero_title").textContent = contact.hero?.title || "Say Hello.";
+        if ($("ns_contact_hero_text")) $("ns_contact_hero_text").textContent = contact.hero?.text || "Have a question? We are here to answer everything.";
+
+        // Basic Info
+        const address = [biz.street_address, biz.city, biz.state].filter(Boolean).join(", ");
+        if ($("contact_address")) $("contact_address").innerHTML = address.replace(", ", "<br>");
+        if ($("ns_address")) $("ns_address").textContent = address;
+        if ($("contact_phone")) $("contact_phone").textContent = biz.phone || "—";
+        businessEmail = biz.owner_email || "";
+        if ($("contact_email")) $("contact_email").textContent = businessEmail;
+
+        // Map Fix
+        if (address) {
+          $("map_frame").src = `https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY_OR_EMBED_URL&q=${encodeURIComponent(address)}&zoom=15`;
+          // Alternative open source fallback if key isn't provided:
+          $("map_frame").src = `https://maps.google.com/maps?q=${encodeURIComponent(address)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+        }
+
+        // Hours
+        const { data: hours } = await sb.from("business_hours").select("*").eq("business_id", biz.id);
+        const hoursEl = $("contact_hours");
+        if (hours?.length) {
+          const SORTER = { "sunday":0, "monday":1, "tuesday":2, "wednesday":3, "thursday":4, "friday":5, "saturday":6 };
+          const DAYS = { "sunday":"Sun", "monday":"Mon", "tuesday":"Tue", "wednesday":"Wed", "thursday":"Thu", "friday":"Fri", "saturday":"Sat" };
+          hours.sort((a, b) => SORTER[a.day_of_week] - SORTER[b.day_of_week]);
+          let hHtml = "";
+          hours.forEach(h => {
+            const ampm = (t) => {
+              if(!t) return "";
+              let [hh, mm] = t.split(":");
+              let H = parseInt(hh);
+              return `${H % 12 || 12}:${mm} ${H >= 12 ? "PM" : "AM"}`;
+            };
+            hHtml += `${DAYS[h.day_of_week]}: ${h.is_closed ? "Closed" : ampm(h.open_time) + " — " + ampm(h.close_time)}<br>`;
+          });
+          hoursEl.innerHTML = hHtml;
+        } else {
+          hoursEl.textContent = contact.info?.hours_fallback || "Hours available upon request.";
+        }
+
+        // Form Submit
+        $("contact_form").onsubmit = (e) => {
+          e.preventDefault();
+          if (!businessEmail) return alert("No contact email found.");
+          const body = `Name: ${$("frm_name").value} (${$("frm_pronouns").value})\nEmail: ${$("frm_email").value}\n\n${$("frm_msg").value}`;
+          const subject = contact.ui?.mailto_subject || "New Inquiry from Canvas Site";
+          window.location.href = `mailto:${businessEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        };
+
+        if (window.lucide) lucide.createIcons();
+      }
+
+      init();
+    })();
   </script>
 </body>
 </html>
