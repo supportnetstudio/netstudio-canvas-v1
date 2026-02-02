@@ -24,7 +24,7 @@
     :root {
       --bg-body: #ffffff;
       --text-main: #111111;
-      --accent: #3b82f6; /* Cobalt Blue */
+      --accent: #3b82f6;
       --surface: #f3f4f6;
       --border: #111111;
       --font-display: 'Space Grotesk', sans-serif;
@@ -65,7 +65,7 @@
     }
     .btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px var(--text-main); }
 
-    /* --- NAVIGATION --- */
+    /* --- NAVIGATION & DRAWER --- */
     nav {
       padding: 24px; display: flex; justify-content: space-between; align-items: center;
       position: sticky; top: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); z-index: 50;
@@ -76,43 +76,60 @@
       letter-spacing: -0.05em; display: flex; align-items: center; gap: 8px;
     }
     .color-dot { width: 12px; height: 12px; background: var(--accent); border-radius: 50%; border: 2px solid var(--text-main); }
-    .nav-links { display: flex; gap: 32px; }
-    .nav-links a { color: var(--text-main); text-decoration: none; font-weight: 600; font-family: var(--font-display); }
-    @media(max-width: 768px) { .nav-links { display: none; } }
+
+    .ns-burger{
+      display:inline-flex; align-items:center; justify-content:center;
+      width:46px; height:46px; border:2px solid var(--text-main);
+      background:#fff; border-radius:14px; box-shadow:3px 3px 0 var(--text-main);
+      cursor:pointer;
+    }
+    .ns-burger:active{ transform:translate(1px,1px); box-shadow:2px 2px 0 var(--text-main); }
+
+    .ns-drawer-overlay{ position:fixed; inset:0; background:rgba(0,0,0,.35); z-index:999; }
+
+    .ns-drawer{
+      position:fixed; top:0; right:0; height:100vh; width:min(360px, 92vw);
+      background:#fff; border-left:2px solid var(--text-main);
+      box-shadow:-8px 0 0 var(--text-main); transform:translateX(110%);
+      transition:transform .22s ease; z-index:1000; display:flex; flex-direction:column;
+    }
+    .ns-drawer.is-open{ transform:translateX(0); }
+
+    .ns-drawer-head{ display:flex; align-items:center; justify-content:space-between; padding:18px; border-bottom:2px solid var(--text-main); }
+    .ns-drawer-brand{ display:flex; align-items:center; gap:10px; font-family:var(--font-display); font-weight:700; letter-spacing:-0.04em; font-size:22px; }
+    .ns-drawer-dot{ width:12px; height:12px; background:var(--accent); border:2px solid var(--text-main); border-radius:50%; }
+    .ns-drawer-close{ width:42px; height:42px; display:inline-flex; align-items:center; justify-content:center; border:2px solid var(--text-main); background:#fff; border-radius:12px; box-shadow:3px 3px 0 var(--text-main); cursor:pointer; }
+    .ns-drawer-close:active{ transform:translate(1px,1px); box-shadow:2px 2px 0 var(--text-main); }
+    .ns-drawer-actions{ padding:18px; border-bottom:2px solid var(--text-main); }
+    .ns-drawer-book{
+      width:100%; display:flex; align-items:center; justify-content:center; gap:10px; padding:14px 16px;
+      border-radius:14px; border:2px solid var(--accent); background:var(--accent); color:#fff;
+      font-family:var(--font-display); font-weight:700; font-size:16px; box-shadow:4px 4px 0 var(--text-main); cursor:pointer;
+    }
+    .ns-drawer-book:active{ transform:translate(1px,1px); box-shadow:3px 3px 0 var(--text-main); }
+    .ns-drawer-links{ padding:10px 18px 18px; display:flex; flex-direction:column; gap:10px; }
+    .ns-drawer-links a{
+      text-decoration:none; color:var(--text-main); font-family:var(--font-display); font-weight:700;
+      text-transform:uppercase; letter-spacing:0.02em; font-size:18px; padding:14px 14px;
+      border:2px solid var(--text-main); border-radius:14px; box-shadow:3px 3px 0 var(--text-main); background:#fff;
+    }
+    .ns-drawer-links a:active{ transform:translate(1px,1px); box-shadow:2px 2px 0 var(--text-main); }
 
     /* --- HERO --- */
-    .about-hero {
-      padding: 80px 0; border-bottom: 2px solid var(--text-main);
-    }
+    .about-hero { padding: 80px 0; border-bottom: 2px solid var(--text-main); }
     .hero-lead { font-size: 20px; max-width: 700px; color: #444; }
 
     /* --- VALUES GRID --- */
-    .values-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 80px;
-    }
+    .values-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 80px; }
     @media(max-width: 768px) { .values-grid { grid-template-columns: 1fr; gap: 30px; } }
-
-    .value-card {
-      background: var(--surface); padding: 40px; border-radius: var(--radius);
-      border: 2px solid var(--text-main); position: relative;
-    }
-    
-    .value-icon {
-      width: 50px; height: 50px; background: white; border: 2px solid var(--text-main);
-      border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      margin-bottom: 20px; color: var(--accent);
-    }
+    .value-card { background: var(--surface); padding: 40px; border-radius: var(--radius); border: 2px solid var(--text-main); position: relative; }
+    .value-icon { width: 50px; height: 50px; background: white; border: 2px solid var(--text-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: var(--accent); }
 
     /* --- MANIFESTO SECTION --- */
-    .manifesto-box {
-      margin-top: 80px; background: #111; color: white; padding: 60px;
-      border-radius: 20px; text-align: center;
-    }
+    .manifesto-box { margin-top: 80px; background: #111; color: white; padding: 60px; border-radius: 20px; text-align: center; }
     @media(max-width: 768px) { .manifesto-box { padding: 40px 24px; } }
 
-    /* --- FOOTER --- */
     footer { padding: 60px 24px; text-align: center; background: #111; color: white; margin-top: 80px; }
-
   </style>
 </head>
 <body>
@@ -122,91 +139,113 @@
       <div class="color-dot"></div>
       CANVAS.
     </div>
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="about.html" class="active" style="text-decoration:underline; text-decoration-color:var(--accent); text-underline-offset:4px;">Philosophy</a>
-      <a href="services.html">Services</a>
-      <a href="team.html">Artists</a>
-    </div>
-    <a href="#book" class="btn" style="padding: 10px 24px; font-size: 16px;" onclick="window.nsOpenBooking(); return false;">Book Now</a>
+    <button class="ns-burger" id="nsBurgerBtn" aria-label="Open menu" aria-expanded="false" aria-controls="nsDrawer">
+      <i data-lucide="menu" style="width:22px;height:22px;"></i>
+    </button>
   </nav>
+
+  <div class="ns-drawer-overlay" id="nsDrawerOverlay" hidden></div>
+
+  <aside class="ns-drawer" id="nsDrawer" aria-hidden="true">
+    <div class="ns-drawer-head">
+      <div class="ns-drawer-brand" id="nsDrawerBrand">
+        <span class="ns-drawer-dot"></span>
+        <span id="nsDrawerBrandText">CANVAS.</span>
+      </div>
+      <button class="ns-drawer-close" id="nsDrawerClose" aria-label="Close menu">
+        <i data-lucide="x" style="width:20px;height:20px;"></i>
+      </button>
+    </div>
+    <div class="ns-drawer-actions">
+      <button class="ns-drawer-book" onclick="nsOpenBooking(); return false;">
+        <i data-lucide="calendar" style="width:16px;height:16px;"></i>
+        Book
+      </button>
+    </div>
+    <nav class="ns-drawer-links" id="nsDrawerLinks">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="team.html">Team</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </aside>
 
   <header class="container about-hero">
     <div class="label" id="about_label">Our Mission</div>
     <h1 id="about_h1">The Future of<br>Hair is Fluid.</h1>
-    <p class="hero-lead" id="about_lead">
-      We started Canvas because we were tired of the binary. 
-      We believe that a haircut shouldn't be defined by who sits in the chair, 
-      but by the hair on their head.
-    </p>
+    <p class="hero-lead" id="about_lead"></p>
   </header>
 
   <main class="container">
-    
     <div class="values-grid">
-      
       <div class="value-card">
         <div class="value-icon"><i data-lucide="clock"></i></div>
         <h3 id="value1_title">Hourly Pricing</h3>
-        <p id="value1_text">
-          Historically, women have paid more for "short cuts" than men. We removed gender from the equation.
-          You pay for the time you book. 45 minutes costs the same for everyone.
-        </p>
+        <p id="value1_text"></p>
       </div>
-
       <div class="value-card">
         <div class="value-icon"><i data-lucide="heart-handshake"></i></div>
         <h3 id="value2_title">Gratuity Free</h3>
-        <p id="value2_text">
-          Tipping culture is confusing and rooted in inequality. We pay our staff a professional, 
-          livable wage so they don't rely on tips. The price on the menu is the final price.
-        </p>
+        <p id="value2_text"></p>
       </div>
-
       <div class="value-card">
         <div class="value-icon"><i data-lucide="smile"></i></div>
         <h3 id="value3_title">Sensory Friendly</h3>
-        <p id="value3_text">
-          Salons can be loud and overwhelming. We offer "Silent Appointments" and use 
-          fragrance-free products upon request to ensure everyone feels comfortable.
-        </p>
+        <p id="value3_text"></p>
       </div>
-
       <div class="value-card">
         <div class="value-icon"><i data-lucide="recycle"></i></div>
         <h3 id="value4_title">Eco-Conscious</h3>
-        <p id="value4_text">
-          We are a Green Circle certified salon. We recycle 95% of our waste, including 
-          hair clippings, foils, and color tubes.
-        </p>
+        <p id="value4_text"></p>
       </div>
-
     </div>
 
     <div class="manifesto-box">
-      <h2 id="manifesto_quote" style="font-family: var(--font-display); font-size: 36px; margin-bottom: 20px;">
-        "Come As You Are."
-      </h2>
-      <p id="manifesto_text" style="font-size: 18px; max-width: 600px; margin: 0 auto 40px; opacity: 0.8;">
-        Canvas is more than a salon. It is a community space. Whether you are transitioning, 
-        maintaining, or transforming, you are safe here.
-      </p>
-      <button id="manifesto_btn" class="btn" style="background: white; color: black; border-color: white;" onclick="window.nsOpenBooking()">
-        Book An Appointment
-      </button>
+      <h2 id="manifesto_quote" style="font-family: var(--font-display); font-size: 36px; margin-bottom: 20px;"></h2>
+      <p id="manifesto_text" style="font-size: 18px; max-width: 600px; margin: 0 auto 40px; opacity: 0.8;"></p>
+      <button id="manifesto_btn" class="btn" style="background: white; color: black; border-color: white;" onclick="window.nsOpenBooking()"></button>
     </div>
-
   </main>
 
   <footer>
     <div id="footer_logo" style="font-family: var(--font-display); font-size: 32px; font-weight: 700; margin-bottom: 20px;">CANVAS.</div>
-    <p style="color: #888; font-size: 14px;">© 2026 Canvas Studio. A Safe Space for All.</p>
+    <p style="color: #888; font-size: 14px;" id="footer_copy"></p>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
   <script>
-    if (window.lucide) lucide.createIcons();
+    /* --- DRAWER LOGIC --- */
+    function nsSetupDrawer(bizNameUpperWithDot) {
+      const btn = document.getElementById("nsBurgerBtn");
+      const drawer = document.getElementById("nsDrawer");
+      const overlay = document.getElementById("nsDrawerOverlay");
+      const closeBtn = document.getElementById("nsDrawerClose");
+      const brandText = document.getElementById("nsDrawerBrandText");
+
+      if (brandText && bizNameUpperWithDot) brandText.textContent = bizNameUpperWithDot;
+      if (!btn || !drawer || !overlay || !closeBtn) return;
+
+      const openDrawer = () => {
+        overlay.hidden = false;
+        drawer.classList.add("is-open");
+        drawer.setAttribute("aria-hidden", "false");
+        btn.setAttribute("aria-expanded", "true");
+      };
+
+      const closeDrawer = () => {
+        drawer.classList.remove("is-open");
+        drawer.setAttribute("aria-hidden", "true");
+        btn.setAttribute("aria-expanded", "false");
+        overlay.hidden = true;
+      };
+
+      btn.onclick = openDrawer;
+      closeBtn.onclick = closeDrawer;
+      overlay.onclick = closeDrawer;
+      document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeDrawer(); });
+    }
 
     /* --- UTILS --- */
     function nsGetSlug() {
@@ -223,11 +262,6 @@
       if (!businessId) return;
       window.NS_BUSINESS_ID = businessId;
       document.documentElement.setAttribute("data-business-id", businessId);
-      if (document.body) document.body.setAttribute("data-business-id", businessId);
-      try {
-        localStorage.setItem("ns_business_id", businessId);
-        sessionStorage.setItem("ns_business_id", businessId);
-      } catch(e) {}
     }
 
     function nsLoadBookingEngine() {
@@ -242,53 +276,38 @@
       });
     }
 
-    function pick(...vals){
-      for (const v of vals) {
-        if (v !== undefined && v !== null && String(v).trim() !== "") return String(v);
-      }
-      return "";
-    }
-    function setText(id, text){
-      const el = document.getElementById(id);
-      if (el) el.textContent = text;
-    }
-    function setHTML(id, html){
-      const el = document.getElementById(id);
-      if (el) el.innerHTML = html;
-    }
+    function pick(...vals){ return vals.find(v => v !== undefined && v !== null && String(v).trim() !== "") || ""; }
+    function setText(id, text){ const el = document.getElementById(id); if (el) el.textContent = text; }
+    function setHTML(id, html){ const el = document.getElementById(id); if (el) el.innerHTML = html; }
 
-    /* --- CONTENT INJECTOR --- */
-    function applyCanvasAboutFromContent(content){
+    function applyCanvasAboutFromContent(content, bizName){
       const c = content || {};
       const about = c.about || {};
       const hero = about.hero || {};
       const values = about.values || [];
       const manifesto = about.manifesto || {};
 
-      // HERO
       setText("about_label", pick(hero.kicker, "Our Mission"));
       setHTML("about_h1", pick(hero.heading, "The Future of<br>Hair is Fluid."));
-      setText("about_lead", pick(hero.text, ""));
+      setText("about_lead", pick(hero.text, "We believe that a haircut shouldn't be defined by who sits in the chair, but by the hair on their head."));
 
-      // VALUES (canonical array)
-      const v1 = values[0] || {};
-      const v2 = values[1] || {};
-      const v3 = values[2] || {};
-      const v4 = values[3] || {};
+      const vArr = [
+        {id: 1, defT: "Hourly Pricing"},
+        {id: 2, defT: "Gratuity Free"},
+        {id: 3, defT: "Sensory Friendly"},
+        {id: 4, defT: "Eco-Conscious"}
+      ];
 
-      setText("value1_title", pick(v1.title, "Hourly Pricing"));
-      setText("value1_text",  pick(v1.text,  ""));
-      setText("value2_title", pick(v2.title, "Gratuity Free"));
-      setText("value2_text",  pick(v2.text,  ""));
-      setText("value3_title", pick(v3.title, "Sensory Friendly"));
-      setText("value3_text",  pick(v3.text,  ""));
-      setText("value4_title", pick(v4.title, "Eco-Conscious"));
-      setText("value4_text",  pick(v4.text,  ""));
+      vArr.forEach((v, i) => {
+        const data = values[i] || {};
+        setText(`value${v.id}_title`, pick(data.title, v.defT));
+        setText(`value${v.id}_text`,  pick(data.text, ""));
+      });
 
-      // MANIFESTO BOX
       setText("manifesto_quote", pick(manifesto.quote, `"Come As You Are."`));
-      setText("manifesto_text", pick(manifesto.text, ""));
+      setText("manifesto_text", pick(manifesto.text, "Canvas is more than a salon. It is a community space."));
       setText("manifesto_btn", pick(manifesto.button_label, "Book An Appointment"));
+      setText("footer_copy", `© ${new Date().getFullYear()} ${bizName}. A Safe Space for All.`);
     }
 
     /* --- DATA LOAD --- */
@@ -300,54 +319,28 @@
       const SLUG = nsGetSlug();
       if (!SLUG) return;
 
-      // 1) Business
-      const { data: biz, error: bizErr } = await sb
-        .from("business")
-        .select("id, name, slug")
-        .eq("slug", SLUG)
-        .maybeSingle();
-
-      if (bizErr) console.error(bizErr);
+      const { data: biz } = await sb.from("business").select("*").eq("slug", SLUG).maybeSingle();
       if (!biz) return;
 
-      // Context + booking engine
       nsSetBusinessContext(biz.id);
       await nsLoadBookingEngine();
 
-      // Branding
-      if (biz.name) {
-        const n = biz.name.toUpperCase() + ".";
-        const navL = document.getElementById("nav_logo");
-        const footL = document.getElementById("footer_logo");
-        if(navL) navL.innerHTML = `<div class="color-dot"></div> ${n}`;
-        if(footL) footL.textContent = n;
-      }
+      const bName = (biz.name || "CANVAS").toUpperCase() + ".";
+      setHTML("nav_logo", `<div class="color-dot"></div> ${bName}`);
+      setText("footer_logo", bName);
+      nsSetupDrawer(bName);
 
-      // 2) Follow pointer (business_sites_one)
       let activeKey = "canvas_v1";
-      const { data: one, error: oneErr } = await sb
-        .from("business_sites_one")
-        .select("active_template_key")
-        .eq("business_id", biz.id)
-        .maybeSingle();
-
-      if (oneErr) console.error(oneErr);
+      const { data: one } = await sb.from("business_sites_one").select("active_template_key").eq("business_id", biz.id).maybeSingle();
       if (one?.active_template_key) activeKey = one.active_template_key.trim();
 
-      // 3) Fetch site row for active template
-      const { data: site, error: siteErr } = await sb
-        .from("business_sites")
-        .select("template_key, content_json")
-        .eq("business_id", biz.id)
-        .eq("template_key", activeKey)
-        .maybeSingle();
+      const { data: site } = await sb.from("business_sites").select("template_key, content_json").eq("business_id", biz.id).eq("template_key", activeKey).maybeSingle();
 
-      if (siteErr) console.error(siteErr);
-
-      // 4) Only apply if canvas_v1 is the active template
       if (site?.template_key === "canvas_v1") {
-        applyCanvasAboutFromContent(site.content_json || {});
+        applyCanvasAboutFromContent(site.content_json || {}, biz.name || "CANVAS");
       }
+      
+      if (window.lucide) lucide.createIcons();
     }
 
     loadCanvasAbout();
